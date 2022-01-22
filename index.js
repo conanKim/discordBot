@@ -21,7 +21,7 @@ client.on("messageCreate", async (message) => {
     };
 
     const sendMessage = (str) => {
-        message.channel.send(str);
+        message.reply(str);
     };
 
     // Exit and stop if it's not there
@@ -54,6 +54,7 @@ client.on("messageCreate", async (message) => {
             sendMessage(`${userName}의 달성 아이템 레벨은 ${level}이고 직업은 ${job}입니다.`);
 
             break;
+
         case "!골드":
             const exampleEmbed = new MessageEmbed()
                 .setColor("#0099ff")
@@ -70,7 +71,7 @@ client.on("messageCreate", async (message) => {
                     { name: "아브렐슈드 하드", value: "10500 (5500 + 2000 + 3000)" }
                 );
 
-            message.channel.send({ embeds: [exampleEmbed] });
+            sendMessage({ embeds: [exampleEmbed] });
             break;
 
         case "!문상":
