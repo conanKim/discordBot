@@ -49,6 +49,9 @@ client.on("messageCreate", async (message) => {
         ).text();
 
         const job = $("img.profile-character-info__img").attr("alt");
+        if (!userName) {
+            return message.channel.send("존재하지 않는 캐릭터입니다.");
+        }
         await message.channel.send(
             `${userName}의 달성 아이템 레벨은 ${level}이고 직업은 ${job}입니다.`
         );
