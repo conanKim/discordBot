@@ -34,6 +34,24 @@ client.on("messageCreate", async (message) => {
             sendMessage("pong!");
             break;
 
+        case "!help":
+        case "!command":
+            sendMessage("주사위, 엔빵, 레벨 [이름], 골드");
+            break;
+
+        case "!엔빵":
+        case "!n":
+            const price = param[0];
+            const n = param[1] || 8;
+            const sellPrice = Math.round((price * 0.95 * (n - 1)) / n);
+            sendMessage(`${price}골 ${n}인빵\n균등가 : ${sellPrice}\n선점가 : ${Math.round(sellPrice / 1.1)}`);
+            break;
+
+        case "!주사위":
+            const max = param[0] || 100;
+            sendMessage(`주사위 ${max}\n결과 : ${Math.floor(Math.random() * max)}`);
+            break;
+
         case "!레벨":
             const msg = await getUserLevel(param[0]);
             sendMessage(msg);
@@ -50,7 +68,7 @@ client.on("messageCreate", async (message) => {
             break;
 
         default:
-            return sendMessage("존재하지 않는 명령어 입니다.");
+            sendMessage("존재하지 않는 명령어 입니다.");
     }
 });
 
