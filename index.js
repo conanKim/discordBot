@@ -6,6 +6,7 @@ const { getGoldEmbed } = require("./command/gold");
 const { parseCultureCoupon } = require("./command/coupon");
 const { getHomework } = require("./command/homework");
 const { getBreath, setBreath } = require("./command/breath");
+const { calcDutchPay } = require("./command/dutchpay");
 
 // Create a new client instance
 const client = new Client({
@@ -45,14 +46,7 @@ client.on("messageCreate", async (message) => {
         case "!n":
         case "!N":
         case "!ㅜ":
-            const price = param[0];
-            const n = param[1] || 8;
-            const sellPrice = Math.round((price * 0.95 * (n - 1)) / n);
-            let priceMsg = `${price}골 ${n}인빵\n`;
-            priceMsg += `균등가 : ${sellPrice}\n`;
-            priceMsg += `선점가 : ${Math.round(sellPrice / 1.1)}`;
-
-            sendMessage(priceMsg);
+            sendMessage(calcDutchPay(param));
             break;
 
         case "!주사위":
