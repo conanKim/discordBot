@@ -22,7 +22,7 @@ client.on("messageCreate", async (message) => {
         return message.content.startsWith(`${prefix}${keyword}`);
     };
 
-    const sendMessage = (str) => {
+    const sendMessage = (str = "") => {
         message.reply(str);
     };
 
@@ -42,10 +42,16 @@ client.on("messageCreate", async (message) => {
 
         case "!엔빵":
         case "!n":
+        case "!N":
+        case "!ㅜ":
             const price = param[0];
             const n = param[1] || 8;
             const sellPrice = Math.round((price * 0.95 * (n - 1)) / n);
-            sendMessage(`${price}골 ${n}인빵\n균등가 : ${sellPrice}\n선점가 : ${Math.round(sellPrice / 1.1)}`);
+            let priceMsg = `${price}골 ${n}인빵\n`;
+            priceMsg += `균등가 : ${sellPrice}\n`;
+            priceMsg += `선점가 : ${Math.round(sellPrice / 1.1)}`;
+
+            sendMessage(priceMsg);
             break;
 
         case "!주사위":
