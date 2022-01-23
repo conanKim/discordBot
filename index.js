@@ -5,6 +5,7 @@ const { getUserLevel } = require("./command/level");
 const { getGoldEmbed } = require("./command/gold");
 const { parseCultureCoupon } = require("./command/coupon");
 const { getHomework } = require("./command/homework");
+const { getBreath, setBreath } = require("./command/breath");
 
 // Create a new client instance
 const client = new Client({
@@ -65,18 +66,23 @@ client.on("messageCreate", async (message) => {
             break;
 
         case "!골드":
-            const embed = getGoldEmbed();
-            sendMessage(embed);
+            sendMessage(getGoldEmbed());
+            break;
+
+        case "!풀숨":
+            sendMessage(getBreath(param));
+            break;
+
+        case "!풀숨설정":
+            sendMessage(setBreath(param));
             break;
 
         case "!숙제":
-            const homework = getHomework();
-            sendMessage(homework);
+            sendMessage(getHomework());
             break;
 
         case "!문상":
-            const result = parseCultureCoupon(param);
-            sendMessage(result);
+            sendMessage(parseCultureCoupon(param));
             break;
 
         default:
