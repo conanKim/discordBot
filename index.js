@@ -4,6 +4,7 @@ const { token } = require("./config.json");
 const { getUserLevel } = require("./command/level");
 const { getGoldEmbed } = require("./command/gold");
 const { parseCultureCoupon } = require("./command/coupon");
+const { getHomework } = require("./command/homework");
 
 // Create a new client instance
 const client = new Client({
@@ -60,6 +61,11 @@ client.on("messageCreate", async (message) => {
         case "!골드":
             const embed = getGoldEmbed();
             sendMessage(embed);
+            break;
+
+        case "!숙제":
+            const homework = getHomework();
+            sendMessage(homework);
             break;
 
         case "!문상":
