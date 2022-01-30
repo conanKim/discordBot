@@ -6,7 +6,7 @@ const { getGoldEmbed } = require("./command/gold");
 const { parseCultureCoupon } = require("./command/coupon");
 const { getHomework } = require("./command/homework");
 const { getBreath, setBreath } = require("./command/breath");
-const { calcDutchPay } = require("./command/dutchpay");
+const { calcDutchPay } = require("./command/dutchPay");
 const { joinRaid } = require("./command/raid");
 
 // Create a new client instance
