@@ -1,6 +1,6 @@
 // Require the necessary discord.js classes
 const { Client, Intents } = require("discord.js");
-const { token, clientId } = require("./config.json");
+const { token, clientId, allowChannelId } = require("./config.json");
 const { getUserLevel } = require("./command/level");
 const { getGoldEmbed } = require("./command/gold");
 const { parseCultureCoupon } = require("./command/coupon");
@@ -28,6 +28,7 @@ client.once("ready", () => {
 client.on("messageCreate", async (message) => {
     console.log(message);
     if (message.author.id === clientId) return;
+    if (!allowChannelId.includes(message.channelId)) return;
 
     const isCommand = (keyword = "") => {
         const prefix = "!";
