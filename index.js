@@ -8,6 +8,7 @@ const { getHomework } = require("./command/homework");
 const { getBreath, setBreath } = require("./command/breath");
 const { calcDutchPay } = require("./command/dutchPay");
 const { joinRaid } = require("./command/raid");
+const { getMember } = require("./command/member");
 
 // Create a new client instance
 const client = new Client({
@@ -69,6 +70,10 @@ client.on("messageCreate", async (message) => {
         case "!주사위":
             const max = param[0] || 100;
             sendMessage(`주사위 ${max}\n결과 : ${Math.floor(Math.random() * max)}`);
+            break;
+
+        case "!멤버":
+            sendMessage(await getMember(param));
             break;
 
         case "!레벨":
