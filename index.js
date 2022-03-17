@@ -46,7 +46,7 @@ client.on("messageCreate", async (message) => {
     const [keyword, ...param] = message.content.split(" ");
 
     if(`!${parseInt(keyword.substring(1))}` === keyword) {
-        sendMessage(calcDutchPay(param));
+        sendMessage(calcDutchPay([parseInt(keyword.substring(1))]));
         return;
     }
 
