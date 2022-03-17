@@ -1,10 +1,15 @@
 const calcDutchPay = (param) => {
     const price = param[0];
-    const n = param[1] || 8;
-    const sellPrice = Math.round((price * 0.95 * (n - 1)) / n);
-    let priceMsg = `${price}골 ${n}인빵\n`;
-    priceMsg += `균등가 : ${sellPrice}\n`;
-    priceMsg += `선점가 : ${Math.round(sellPrice / 1.1)}`;
+    let priceMsg = `${price}골\n\n`;
+    const sellPrice8 = Math.round((price * 0.95 * (8 - 1)) / 8);
+    const sellPrice4 = Math.round((price * 0.95 * (4 - 1)) / 4);
+    priceMsg += `8인 기준\n`;
+    priceMsg += `균등가 : ${sellPrice8}\n`;
+    priceMsg += `선점가 : ${Math.round(sellPrice8 / 1.1)}\n\n`;
+    
+    priceMsg += `4인 기준\n`;
+    priceMsg += `균등가 : ${sellPrice4}\n`;
+    priceMsg += `선점가 : ${Math.round(sellPrice4 / 1.1)}`;
 
     return priceMsg;
 };

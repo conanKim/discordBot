@@ -44,6 +44,12 @@ client.on("messageCreate", async (message) => {
     if (!isCommand()) return;
 
     const [keyword, ...param] = message.content.split(" ");
+
+    if(`!${parseInt(keyword.substring(1))}` === keyword) {
+        sendMessage(calcDutchPay(param));
+        return;
+    }
+
     switch (keyword) {
         case "!ping":
             sendMessage("pong!");
