@@ -11,6 +11,7 @@ const { calcDutchPay } = require("./command/dutchPay");
 const { joinRaid } = require("./command/raid");
 const { getMember } = require("./command/member");
 const { getCharacter } = require("./command/character");
+const { getParty } = require("./command/party");
 
 const PG = require("./dao/index");
 
@@ -90,6 +91,10 @@ bot.on("messageCreate", async (message) => {
 
         case "!캐릭터":
             sendMessage(await getCharacter(param));
+            break;
+
+        case "!파티":
+            sendMessage(await getParty(param));
             break;
 
         case "!레벨":

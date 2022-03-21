@@ -49,6 +49,7 @@ const query = async (query, params) => {
                 if (res) {
                     resolve(res.rows);
                 } else {
+                    console.log(err);
                     reject(err);
                 }
             });
