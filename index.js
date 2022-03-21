@@ -1,6 +1,10 @@
 // Require the necessary discord.js classes
-const { Client, Intents } = require("discord.js");
-const { token, clientId, allowChannelId } = require("./config.json");
+const { token, clientId, allowChannelId, database } = require("./config.json");
+const { Client: BotClient, Intents } = require("discord.js");
+const { Client: PGClient } = require('pg')
+const pgClient = new PGClient(database)
+pgClient.connect()
+
 const { getUserLevel } = require("./command/level");
 const { getGoldEmbed } = require("./command/gold");
 const { parseCultureCoupon } = require("./command/coupon");
@@ -10,10 +14,10 @@ const { calcDutchPay } = require("./command/dutchPay");
 const { joinRaid } = require("./command/raid");
 const { getMember } = require("./command/member");
 
-const schema = require("./schema");
+const { schema } = require("./dao/index");
 
 // Create a new client instance
-const client = new Client({
+const bot = new BotClient({
     intents: [
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES,
@@ -24,13 +28,14 @@ const client = new Client({
 });
 
 // When the client is ready, run this code (only once)
-client.once("ready", () => {
+bot.once("ready", () => {
     console.log("Ready!");
 });
 
-schema.connectDB();
+console.log(pgClient)
+schema(pgClient);
 
-client.on("messageCreate", async (message) => {
+bot.on("messageCreate", async (message) => {
     console.log(message);
     if (message.author.id === clientId) return;
     if (!allowChannelId.includes(message.channelId)) return;
@@ -121,7 +126,7 @@ client.on("messageCreate", async (message) => {
     }
 });
 
-client.on("messageReactionAdd", async (reaction, user) => {
+bot.on("messageReactionAdd", async (reaction, user) => {
     // When a reaction is received, check if the structure is partial
     if (reaction.partial) {
         // If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
@@ -142,7 +147,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
     console.log(`${reaction.count} user(s) have given the same reaction to this message!`);
 });
 
-client.on("messageReactionRemove", async (reaction, user) => {
+bot.on("messageReactionRemove", async (reaction, user) => {
     // When a reaction is received, check if the structure is partial
     if (reaction.partial) {
         // If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
@@ -164,4 +169,4 @@ client.on("messageReactionRemove", async (reaction, user) => {
 });
 
 // Login to Discord with your client's token
-client.login(token);
+bot.login(token);
