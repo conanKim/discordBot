@@ -10,6 +10,7 @@ const { getBreath, setBreath } = require("./command/breath");
 const { calcDutchPay } = require("./command/dutchPay");
 const { joinRaid } = require("./command/raid");
 const { getMember } = require("./command/member");
+const { getCharacter } = require("./command/character");
 
 const PG = require("./dao/index");
 
@@ -31,7 +32,6 @@ bot.once("ready", () => {
 
 PG.connect();
 
-
 bot.on("messageCreate", async (message) => {
     console.log(message);
     if (message.author.id === clientId) return;
@@ -51,7 +51,7 @@ bot.on("messageCreate", async (message) => {
 
     const [keyword, ...param] = message.content.split(" ");
 
-    if(`!${parseInt(keyword.substring(1))}` === keyword) {
+    if (`!${parseInt(keyword.substring(1))}` === keyword) {
         sendMessage(calcDutchPay(param));
         return;
     }
@@ -86,6 +86,10 @@ bot.on("messageCreate", async (message) => {
 
         case "!멤버":
             sendMessage(await getMember(param));
+            break;
+
+        case "!캐릭터":
+            sendMessage(await getCharacter(param));
             break;
 
         case "!레벨":
