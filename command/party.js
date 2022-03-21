@@ -8,7 +8,7 @@ const getParty = async ([keyword, ...param] = []) => {
     emptyMsg += `!파티 생성 [레이드] [난이도]\n`;
     emptyMsg += `!파티 목록\n`;
     emptyMsg += `!파티 목록 [레이드]\n`;
-    emptyMsg += `!파티 삭제 [닉네임]\n\n`;
+    emptyMsg += `!파티 삭제 [번호]\n\n`;
 
     emptyMsg += `!파티 참가 [번호] [캐릭명]\n`;
     emptyMsg += `!파티 조회 [번호]\n`;
