@@ -4,7 +4,7 @@ const createTable = `CREATE TABLE IF NOT EXISTS characters (
     name varchar (50) unique not null,
     FOREIGN KEY (user_id) REFERENCES users (user_id),
     PRIMARY KEY (char_id, user_id)
-)`
+);`
 
 module.exports = {
     init: createTable

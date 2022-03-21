@@ -3,7 +3,7 @@ const createTable = `CREATE TABLE IF NOT EXISTS parties (
     raid_id integer not null,
     difficulty varchar(10) not null,
     FOREIGN KEY (raid_id) REFERENCES raids (raid_id)
-)`
+);`
 
 module.exports = {
     init: createTable
