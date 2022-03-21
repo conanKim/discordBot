@@ -1,10 +1,21 @@
+const { Client: PGClient } = require('pg')
+const { database } = require('../config.json');
+let pgClient;
+
 const user = require("./user");
 const raid = require("./raid");
 const character = require("./character");
 const party = require("./party");
 const partymember = require("./partymember");
 
-const schema = async (pgClient) => {
+const connect = async () => {
+    pgClient = new PGClient(database)
+    await pgClient.connect();
+
+    await schema();
+}
+
+const schema = async () => {
     console.log(user.init);
     console.log(raid.init);
     console.log(character.init);
@@ -32,6 +43,25 @@ const schema = async (pgClient) => {
     });
 }
 
+const query = async(query, params) => {
+    return new Promise((resolve, reject) => {
+        try {
+            return pgClient.query(query, params, (err, res) => {
+                if (res) {
+                    resolve(res.rows);
+                } else {
+                    reject(err);
+                }
+            })
+        } catch(e) {
+            reject("알수 없는 에러가 발생했습니다.");
+        }
+    }) 
+}
+
 module.exports = {
+    client: pgClient,
+    query, query,
+    connect: connect,
     schema: schema
 }

@@ -1,9 +1,6 @@
 // Require the necessary discord.js classes
-const { token, clientId, allowChannelId, database } = require("./config.json");
+const { token, clientId, allowChannelId } = require("./config.json");
 const { Client: BotClient, Intents } = require("discord.js");
-const { Client: PGClient } = require('pg')
-const pgClient = new PGClient(database)
-pgClient.connect()
 
 const { getUserLevel } = require("./command/level");
 const { getGoldEmbed } = require("./command/gold");
@@ -14,7 +11,7 @@ const { calcDutchPay } = require("./command/dutchPay");
 const { joinRaid } = require("./command/raid");
 const { getMember } = require("./command/member");
 
-const { schema } = require("./dao/index");
+const PG = require("./dao/index");
 
 // Create a new client instance
 const bot = new BotClient({
@@ -32,8 +29,8 @@ bot.once("ready", () => {
     console.log("Ready!");
 });
 
-console.log(pgClient)
-schema(pgClient);
+PG.connect();
+
 
 bot.on("messageCreate", async (message) => {
     console.log(message);
