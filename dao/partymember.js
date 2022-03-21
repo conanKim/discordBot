@@ -1,4 +1,4 @@
-const createTable = `CREATE TABLE IF NOT EXIST partymember (
+const createTable = `CREATE TABLE IF NOT EXISTS partymembers (
     party_id integer not null,
     charactor_id integer not null,
 )`

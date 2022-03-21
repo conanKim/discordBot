@@ -1,4 +1,4 @@
-const createTable = `CREATE TABLE IF NOT EXIST party (
+const createTable = `CREATE TABLE IF NOT EXISTS parties (
     party_id serial PRIMARY KEY,
     raid_id integer not null,
     difficulty varchar(10) not null,

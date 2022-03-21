@@ -4,14 +4,18 @@ const character = require("./character");
 const party = require("./party");
 const partymember = require("./partymember");
 
-const connectDB = () => {
+const schema = (pgClient) => {
     console.log(user.init);
     console.log(raid.init);
     console.log(character.init);
     console.log(party.init);
-    console.log(partymember.init);    
+    console.log(partymember.init);
+
+    pgClient.query(user.init, (err, res) => {
+        console.log(err,res);
+    });
 }
 
 module.exports = {
-    connectDB: connectDB
+    schema: schema
 }

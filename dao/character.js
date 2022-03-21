@@ -1,4 +1,4 @@
-const createTable = `CREATE TABLE IF NOT EXIST character (
+const createTable = `CREATE TABLE IF NOT EXISTS characters (
     char_id serial,
     user_id integer NOT NULL,
     name varchar (50) unique not null,
