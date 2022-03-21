@@ -2,7 +2,7 @@ const INIT = `CREATE TABLE IF NOT EXISTS characters (
     char_name varchar(50) UNIQUE NOT NULL,
     char_level integer NOT NULL,
     user_name varchar(50) UNIQUE NOT NULL,
-    class_name varchar(50) UNIQUE NOT NULL,
+    class_name varchar(50) NOT NULL,
     FOREIGN KEY (user_name) REFERENCES users (user_name),
     FOREIGN KEY (class_name) REFERENCES classes (class_name),
     PRIMARY KEY (char_name)
