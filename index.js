@@ -10,6 +10,8 @@ const { calcDutchPay } = require("./command/dutchPay");
 const { joinRaid } = require("./command/raid");
 const { getMember } = require("./command/member");
 
+const schema = require("./schema");
+
 // Create a new client instance
 const client = new Client({
     intents: [
@@ -25,6 +27,8 @@ const client = new Client({
 client.once("ready", () => {
     console.log("Ready!");
 });
+
+schema.connectDB();
 
 client.on("messageCreate", async (message) => {
     console.log(message);
