@@ -1,6 +1,7 @@
 // Require the necessary discord.js classes
-const { Client, Intents } = require("discord.js");
 const { token, clientId, allowChannelId } = require("./config.json");
+const { Client: BotClient, Intents } = require("discord.js");
+
 const { getUserLevel } = require("./command/level");
 const { getGoldEmbed } = require("./command/gold");
 const { parseCultureCoupon } = require("./command/coupon");
@@ -9,9 +10,13 @@ const { getBreath, setBreath } = require("./command/breath");
 const { calcDutchPay } = require("./command/dutchPay");
 const { joinRaid } = require("./command/raid");
 const { getMember } = require("./command/member");
+const { getCharacter } = require("./command/character");
+const { getParty } = require("./command/party");
+
+const PG = require("./dao/index");
 
 // Create a new client instance
-const client = new Client({
+const bot = new BotClient({
     intents: [
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES,
@@ -22,11 +27,13 @@ const client = new Client({
 });
 
 // When the client is ready, run this code (only once)
-client.once("ready", () => {
+bot.once("ready", () => {
     console.log("Ready!");
 });
 
-client.on("messageCreate", async (message) => {
+PG.connect();
+
+bot.on("messageCreate", async (message) => {
     console.log(message);
     if (message.author.id === clientId) return;
     if (!allowChannelId.includes(message.channelId)) return;
@@ -45,7 +52,7 @@ client.on("messageCreate", async (message) => {
 
     const [keyword, ...param] = message.content.split(" ");
 
-    if(`!${parseInt(keyword.substring(1))}` === keyword) {
+    if (`!${parseInt(keyword.substring(1))}` === keyword) {
         sendMessage(calcDutchPay([parseInt(keyword.substring(1))]));
         return;
     }
@@ -80,6 +87,14 @@ client.on("messageCreate", async (message) => {
 
         case "!멤버":
             sendMessage(await getMember(param));
+            break;
+
+        case "!캐릭터":
+            sendMessage(await getCharacter(param));
+            break;
+
+        case "!파티":
+            sendMessage(await getParty(param));
             break;
 
         case "!레벨":
@@ -117,7 +132,7 @@ client.on("messageCreate", async (message) => {
     }
 });
 
-client.on("messageReactionAdd", async (reaction, user) => {
+bot.on("messageReactionAdd", async (reaction, user) => {
     // When a reaction is received, check if the structure is partial
     if (reaction.partial) {
         // If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
@@ -138,7 +153,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
     console.log(`${reaction.count} user(s) have given the same reaction to this message!`);
 });
 
-client.on("messageReactionRemove", async (reaction, user) => {
+bot.on("messageReactionRemove", async (reaction, user) => {
     // When a reaction is received, check if the structure is partial
     if (reaction.partial) {
         // If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
@@ -160,4 +175,4 @@ client.on("messageReactionRemove", async (reaction, user) => {
 });
 
 // Login to Discord with your client's token
-client.login(token);
+bot.login(token);
