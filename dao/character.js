@@ -10,7 +10,14 @@ const INIT = `CREATE TABLE IF NOT EXISTS characters (
 
 const CREATE = `INSERT INTO characters (user_name, char_name, class_name, char_level) VALUES ($1, $2, $3, $4);`;
 const SELECT = `SELECT * FROM characters WHERE user_name = $1;`;
-const UPDATE = `UPDATE characters SET char_level = $2 WHERE char_name = $1;`;
+const UPDATE = `
+INSERT INTO 
+    characters (user_name, char_name, class_name, char_level) 
+    VALUES ($1, $2, $3, $4)
+ON CONFLICT (char_name)
+DO UPDATE
+SET (class_name, char_level) = (excluded.class_name, excluded.char_level)
+`;
 const DELETE = `DELETE FROM characters WHERE char_name = $1`;
 
 module.exports = {

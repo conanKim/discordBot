@@ -39,7 +39,12 @@ const getCharacter = async ([keyword, ...param] = []) => {
     if (keyword === "조회") {
         return pgClient
             .query(charDao.list, param)
-            .then((res) => JSON.stringify(res))
+            .then((res) =>
+                res
+                    .sort((a, b) => b.char_level - a.char_level)
+                    .map((char) => `${char.char_name} - ${char.char_level} ${char.class_name}`)
+                    .join("\n")
+            )
             .catch(() => "실패");
     }
 
