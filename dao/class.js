@@ -16,7 +16,7 @@ INSERT INTO classes (class_name, class_nickname, root_class, type) VALUES ('기�
 INSERT INTO classes (class_name, class_nickname, root_class, type) VALUES ('창술사', '창술', '무도가', '딜러');
 INSERT INTO classes (class_name, class_nickname, root_class, type) VALUES ('스트라이커', '스커', '무도가', '딜러');
 INSERT INTO classes (class_name, class_nickname, root_class, type) VALUES ('데빌헌터', '데헌', '헌터', '딜러');
-INSERT INTO classes (class_name, class_nickname, root_class, type) VALUES ('블래스터', '블래', '헌터', '딜러');
+INSERT INTO classes (class_name, class_nickname, root_class, type) VALUES ('블래스터', '밥통', '헌터', '딜러');
 INSERT INTO classes (class_name, class_nickname, root_class, type) VALUES ('호크아이', '호크', '헌터', '딜러');
 INSERT INTO classes (class_name, class_nickname, root_class, type) VALUES ('스카우터', '스카', '헌터', '딜러');
 INSERT INTO classes (class_name, class_nickname, root_class, type) VALUES ('건슬링어', '건슬', '헌터', '딜러');
