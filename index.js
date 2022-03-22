@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { token, clientId, allowChannelId } = require("./config.json");
+const { token, adminId, clientId, allowChannelId } = require("./config.json");
 const { Client: BotClient, Intents } = require("discord.js");
 
 const { getUserLevel } = require("./command/level");
@@ -14,6 +14,7 @@ const { getCharacter } = require("./command/character");
 const { getParty } = require("./command/party");
 
 const PG = require("./dao/index");
+const { adminCommand } = require("./command/admin");
 
 // Create a new client instance
 const bot = new BotClient({
@@ -125,6 +126,13 @@ bot.on("messageCreate", async (message) => {
         case "!레이드":
             const raidMessage = await joinRaid(param);
             sendMessage(raidMessage);
+            break;
+
+        case "!관리자":
+            if (message.author.id !== adminId) return sendMessage("권한이 없습니다.");
+
+            const resultMsg = await adminCommand(param);
+            sendMessage(resultMsg);
             break;
 
         default:

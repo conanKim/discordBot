@@ -40,9 +40,11 @@ const schema = async () => {
     await pgClient.query(partymember.init, (err, res) => {
         console.log(err, res);
     });
+
+    console.log("SCHEMA DONE");
 };
 
-const query = async (query, params) => {
+const query = (query, params) => {
     return new Promise((resolve, reject) => {
         try {
             return pgClient.query(query, params, (err, res) => {
