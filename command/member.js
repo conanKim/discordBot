@@ -42,6 +42,7 @@ const getMember = async ([keyword, ...param] = []) => {
     }
 
     if (keyword === "갱신") {
+        if (!param[0]) return "갱신할 멤버 이름을 입력해주세요.";
         const regCharList = await pgClient.query(charDao.list, param);
         if (!regCharList.length) return "먼저 캐릭터를 하나 이상 등록해주세요.";
 
