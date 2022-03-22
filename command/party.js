@@ -70,7 +70,11 @@ const getParty = async ([keyword, ...param] = []) => {
 
                     return prev;
                 }, []);
-                return JSON.stringify(result, null, 2);
+                return JSON.stringify(
+                    result.map((r) => `${r.raid} ${r.diff} ${r.id}파티 - ${r.members.join(", ")}`),
+                    null,
+                    2
+                );
             })
             .catch(() => "실패");
     }
