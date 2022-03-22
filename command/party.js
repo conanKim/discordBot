@@ -29,11 +29,10 @@ const getParty = async ([keyword, ...param] = []) => {
     }
 
     if (keyword === "목록") {
-        query = !param[0] ? partyDao.list : partyDao.listByRaid;
         return pgClient
-            .query(query, param)
+            .query(partyDao.list, param)
             .then((res) => JSON.stringify(res))
-            .catch(() => "실패");
+            .catch(() => "파티 목록 조회에 실패했습니다.");
     }
 
     if (keyword === "삭제") {
@@ -51,19 +50,36 @@ const getParty = async ([keyword, ...param] = []) => {
     }
 
     if (keyword === "조회") {
-        query = `${parseInt(param[0])}` === param[0] ? partyMemberDao.listByParty : partyMemberDao.listByChar;
-
+        query = !param[0] ? partyDao.listAll : partyDao.listByRaid;
         return pgClient
             .query(query, param)
-            .then((res) => JSON.stringify(res))
+            .then((res) => {
+                const result = res.reduce((prev, curr) => {
+                    const prevParty = prev.find((p) => p.id === curr.party_id);
+                    if (prevParty) {
+                        prevParty.members.push(`${curr.prefix}${curr.class_nickname}`);
+                        return prev;
+                    }
+
+                    prev.push({
+                        id: curr.party_id,
+                        raid: curr.raid_nickname,
+                        diff: curr.difficulty,
+                        members: [`${curr.prefix}${curr.class_nickname}`],
+                    });
+
+                    return prev;
+                }, []);
+                return JSON.stringify(result, null, 2);
+            })
             .catch(() => "실패");
     }
 
     if (keyword === "탈퇴") {
         return pgClient
             .query(partyMemberDao.delete, param)
-            .then(() => "파티 삭제에 성공했습니다.")
-            .catch(() => "파티 삭제에 실패했습니다.");
+            .then(() => "파티 탈퇴에 성공했습니다.")
+            .catch(() => "파티 탈퇴에 실패했습니다.");
     }
 
     return emptyMsg;

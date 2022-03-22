@@ -2,7 +2,8 @@ const INIT = `CREATE TABLE IF NOT EXISTS partymembers (
     party_id integer not null,
     char_name varchar(50) not null,
     FOREIGN KEY (party_id) REFERENCES parties (party_id),
-    FOREIGN KEY (char_name) REFERENCES characters (char_name)
+    FOREIGN KEY (char_name) REFERENCES characters (char_name),
+    PRIMARY KEY (party_id, char_name)
 );`;
 
 const CREATE = `INSERT INTO partymembers (party_id, char_name) VALUES ($1, $2);`;
