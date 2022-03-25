@@ -79,6 +79,40 @@ const getParty = async ([keyword, ...param] = []) => {
             .catch(() => "실패");
     }
 
+    if (keyword === "찾기") {
+        const members = param[0].split("");
+        return pgClient
+            .query(partyDao.listAll)
+            .then((res) => {
+                const result = res.reduce((prev, curr) => {
+                    const prevParty = prev.find((p) => p.id === curr.party_id);
+                    if (prevParty) {
+                        prevParty.members.push(`${curr.prefix}${curr.class_nickname}`);
+                        prevParty.prefixs = prevParty.prefixs + curr.prefix;
+                        return prev;
+                    }
+
+                    prev.push({
+                        id: curr.party_id,
+                        raid: curr.raid_nickname,
+                        diff: curr.difficulty,
+                        members: [`${curr.prefix}${curr.class_nickname}`],
+                        prefixs: [curr.prefix]
+                    });
+
+                    return prev;
+                }, []);
+
+                return JSON.stringify(
+                    result.filter((res) => members.every((m => res.prefixs.includes(m))))
+                        .map((r) => `${r.raid} ${r.diff} ${r.id}파티 - ${r.members.join(", ")}`),
+                    null,
+                    2
+                );
+            })
+            .catch(() => "");
+    }
+
     if (keyword === "탈퇴") {
         return pgClient
             .query(partyMemberDao.delete, param)
