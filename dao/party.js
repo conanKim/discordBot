@@ -21,8 +21,9 @@ WHERE
     pm.char_name = c.char_name and 
     c.user_name = u.user_name and 
     c.class_name = cl.class_name and
-    raid_nickname = $1;
-`;
+    raid_nickname = $1
+ORDER BY pm.party_id
+;`;
 
 const SELECT_ALL = `
 SELECT *
@@ -37,6 +38,7 @@ WHERE
     pm.char_name = c.char_name and 
     c.user_name = u.user_name and 
     c.class_name = cl.class_name
+ORDER BY pm.party_id
 `;
 
 const UPDATE = `UPDATE parties SET difficulty = $2 WHERE party_id = $1;`;
