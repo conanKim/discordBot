@@ -45,7 +45,8 @@ bot.on("messageCreate", async (message) => {
             return message.content.startsWith(`${prefix}${keyword}`);
         };
 
-        const sendMessage = (str = "알수없는 오류") => {
+        const sendMessage = (str = "") => {
+            if (!str) return message.reply("알수없는 오류");
             message.reply(str);
         };
 
