@@ -46,11 +46,8 @@ bot.on("messageCreate", async (message) => {
         };
 
         const sendMessage = (str) => {
-            try {
-                message.reply(str);
-            } catch(e) {
-                message.reply(e.message || "알 수 없는 오류");
-            }
+            if (!str) return message.reply("알 수 없는 오류");
+            message.reply(str);
         };
 
         // Exit and stop if it's not there
