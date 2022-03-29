@@ -42,7 +42,7 @@ const getCharacter = async ([keyword, ...param] = []) => {
             .then((res) =>
                 res
                     .sort((a, b) => b.char_level - a.char_level)
-                    .map((char) => `${char.char_name} - ${char.char_level} ${char.class_name}`)
+                    .map((char) => `${char.emoji}${char.char_name} - ${char.char_level} ${char.class_name}`)
                     .join("\n")
             )
             .catch(() => "실패");

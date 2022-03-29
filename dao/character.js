@@ -9,7 +9,11 @@ const INIT = `CREATE TABLE IF NOT EXISTS characters (
 );`;
 
 const CREATE = `INSERT INTO characters (user_name, char_name, class_name, char_level) VALUES ($1, $2, $3, $4);`;
-const SELECT = `SELECT * FROM characters WHERE user_name = $1;`;
+const SELECT = `
+SELECT *
+FROM characters crt, classes c
+WHERE crt.user_name = $1 and crt.class_name = c.class_name;
+`;
 const UPDATE = `
 INSERT INTO 
     characters (user_name, char_name, class_name, char_level) 
