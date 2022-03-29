@@ -6,13 +6,11 @@ const getParty = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
     emptyMsg += `!파티 생성 [레이드] [난이도]\n`;
-    emptyMsg += `!파티 목록\n`;
     emptyMsg += `!파티 목록 [레이드]\n`;
     emptyMsg += `!파티 삭제 [번호]\n\n`;
 
     emptyMsg += `!파티 참가 [번호] [캐릭명]\n`;
-    emptyMsg += `!파티 조회 [번호]\n`;
-    emptyMsg += `!파티 조회 [캐릭명]\n`;
+    emptyMsg += `!파티 조회 [레이드명]\n`;
     emptyMsg += `!파티 탈퇴 [번호] [캐릭명]\n`;
 
     let query;
@@ -50,9 +48,9 @@ const getParty = async ([keyword, ...param] = []) => {
     }
 
     if (keyword === "조회") {
-        query = !param[0] ? partyDao.listAll : partyDao.listByRaid;
+        if(!param[0]) return "레이드 명을 입력해주세요."
         return pgClient
-            .query(query, param)
+            .query(partyDao.listByRaid, param)
             .then((res) => {
                 const result = res.reduce((prev, curr) => {
                     const prevParty = prev.find((p) => p.id === curr.party_id);
