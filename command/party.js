@@ -80,10 +80,10 @@ const getParty = async ([keyword, ...param] = []) => {
     }
 
     if (keyword === "찾기") {
-        const members = param[0].split("");
-        query = !param[1] ? partyDao.listAll : partyDao.listByRaid;
+        const [members, ...raid] = param;
+        query = raid.length === 0 ? partyDao.listAll : partyDao.listByRaid;
         return pgClient
-            .query(query)
+            .query(query, raid)
             .then((res) => {
                 const result = res.reduce((prev, curr) => {
                     const prevParty = prev.find((p) => p.id === curr.party_id);
@@ -105,7 +105,7 @@ const getParty = async ([keyword, ...param] = []) => {
                 }, []);
 
                 return JSON.stringify(
-                    result.filter((res) => members.every((m => res.prefixs.includes(m))))
+                    result.filter((res) => members.split("").every((m => res.prefixs.includes(m))))
                         .map((r) => `${r.raid} ${r.diff} ${r.id}파티 - ${r.members.join(", ")}`),
                     null,
                     2
