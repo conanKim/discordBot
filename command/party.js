@@ -1,7 +1,19 @@
+const { MessageEmbed } = require("discord.js");
 const pgClient = require("../dao");
 const partyDao = require("../dao/party");
 const partyMemberDao = require("../dao/partymember");
 
+const generatePartyEmbed = (title, party) => {
+    const embed = new MessageEmbed();
+    embed.setTitle(title);
+    
+    party.forEach(p => {
+        embed.addField(`${p.raid} ${p.diff} ${p.id}파티`, p.members.join(" "));
+        embed.addField('\u200b', '\u200b', false);
+    });
+
+    return { embeds: [embed] }
+}
 const getParty = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
@@ -61,7 +73,7 @@ const getParty = async ([keyword, ...param] = []) => {
                     return prev;
                 }, []);
 
-                return result.map((r) => `${r.raid} ${r.diff} ${r.id}파티\n${r.members.join(", ")}`).join('\n\n')
+                return generatePartyEmbed(`파티 목록 - ${param[0]}`, result)
             })
             .catch(() => "실패");
     }
@@ -89,10 +101,9 @@ const getParty = async ([keyword, ...param] = []) => {
                     });
 
                     return prev;
-                }, []);
+                }, []).filter((res) => members.split("").every(m => res.prefixs.includes(m)));
 
-                return result.filter((res) => members.split("").every((m => res.prefixs.includes(m))))
-                        .map((r) => `${r.raid} ${r.diff} ${r.id}파티\n${r.members.join(", ")}`).join('\n\n')
+                return generatePartyEmbed(`파티 찾기 - ${param[0]}`, result)
             })
             .catch(() => "");
     }
