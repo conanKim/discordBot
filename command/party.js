@@ -4,7 +4,7 @@ const partyDao = require("../dao/party");
 const partyMemberDao = require("../dao/partymember");
 
 const generatePartyEmbed = (title, party) => {
-    return `${title}\n\n` + party.map((p) => `${p.raid} ${p.diff} ${p.id}파티\n${p.members.join(", ")}`).join('\n\n')
+    return `${title}\n\n` + party.map((p) => `${p.raid} ${p.diff} ${p.id}파티\n${p.members.join(" ")}`).join('\n\n')
 }
 
 const getParty = async ([keyword, ...param] = []) => {
