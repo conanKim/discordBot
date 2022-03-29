@@ -6,7 +6,7 @@ const INIT = `CREATE TABLE IF NOT EXISTS parties (
     PRIMARY KEY (party_id)
 );`;
 
-const CREATE = `INSERT INTO parties (raid_nickname, difficulty) VALUES ($1, $2);`;
+const CREATE = `INSERT INTO parties (raid_nickname, difficulty) VALUES ($1, $2) RETURNING party_id;`;
 const SELECT = `SELECT * FROM parties`;
 const SELECT_BY_RAID = `
 SELECT *

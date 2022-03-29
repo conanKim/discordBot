@@ -22,15 +22,8 @@ const getParty = async ([keyword, ...param] = []) => {
     if (keyword === "생성") {
         return pgClient
             .query(partyDao.create, param)
-            .then(() => "파티 생성에 성공했습니다.")
+            .then((res) => `${param[0]} ${param[1]} ${res[0].party_id}파티 생성에 성공했습니다.`)
             .catch(() => "파티 생성에 실패했습니다.");
-    }
-
-    if (keyword === "목록") {
-        return pgClient
-            .query(partyDao.list, param)
-            .then((res) => JSON.stringify(res))
-            .catch(() => "파티 목록 조회에 실패했습니다.");
     }
 
     if (keyword === "삭제") {
@@ -47,7 +40,7 @@ const getParty = async ([keyword, ...param] = []) => {
             .catch(() => "파티 참가에 실패했습니다.");
     }
 
-    if (keyword === "조회") {
+    if (keyword === "목록") {
         if(!param[0]) return "레이드 명을 입력해주세요."
         return pgClient
             .query(partyDao.listByRaid, param)
