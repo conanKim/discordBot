@@ -4,16 +4,9 @@ const partyDao = require("../dao/party");
 const partyMemberDao = require("../dao/partymember");
 
 const generatePartyEmbed = (title, party) => {
-    const embed = new MessageEmbed();
-    embed.setTitle(title);
-    
-    party.forEach(p => {
-        embed.addField(`${p.raid} ${p.diff} ${p.id}파티`, p.members.join(" "));
-        embed.addField('\u200b', '\u200b', false);
-    });
-
-    return { embeds: [embed] }
+    return `${title}\n\n` + party.map((p) => `${p.raid} ${p.diff} ${p.id}파티\n${p.members.join(", ")}`).join('\n\n')
 }
+
 const getParty = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
