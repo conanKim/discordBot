@@ -41,6 +41,10 @@ const schema = async () => {
         console.log(err, res);
     });
 
+    await pgClient.query(classes.update, (err, res) => {
+        console.log(err, res);
+    })
+
     console.log("SCHEMA DONE");
 };
 

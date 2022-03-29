@@ -57,7 +57,7 @@ const getParty = async ([keyword, ...param] = []) => {
                 const result = res.reduce((prev, curr) => {
                     const prevParty = prev.find((p) => p.id === curr.party_id);
                     if (prevParty) {
-                        prevParty.members.push(`${curr.prefix}${curr.class_nickname}`);
+                        prevParty.members.push(`${curr.emoji}${curr.prefix}${curr.class_nickname}`);
                         return prev;
                     }
 
@@ -65,16 +65,13 @@ const getParty = async ([keyword, ...param] = []) => {
                         id: curr.party_id,
                         raid: curr.raid_nickname,
                         diff: curr.difficulty,
-                        members: [`${curr.prefix}${curr.class_nickname}`],
+                        members: [`${curr.emoji}${curr.prefix}${curr.class_nickname}`],
                     });
 
                     return prev;
                 }, []);
-                return JSON.stringify(
-                    result.map((r) => `${r.raid} ${r.diff} ${r.id}파티 - ${r.members.join(", ")}`),
-                    null,
-                    2
-                );
+
+                return result.map((r) => `${r.raid} ${r.diff} ${r.id}파티\n${r.members.join(", ")}`).join('\n\n')
             })
             .catch(() => "실패");
     }
@@ -88,7 +85,7 @@ const getParty = async ([keyword, ...param] = []) => {
                 const result = res.reduce((prev, curr) => {
                     const prevParty = prev.find((p) => p.id === curr.party_id);
                     if (prevParty) {
-                        prevParty.members.push(`${curr.prefix}${curr.class_nickname}`);
+                        prevParty.members.push(`${curr.emoji}${curr.prefix}${curr.class_nickname}`);
                         prevParty.prefixs = prevParty.prefixs + curr.prefix;
                         return prev;
                     }
@@ -97,19 +94,15 @@ const getParty = async ([keyword, ...param] = []) => {
                         id: curr.party_id,
                         raid: curr.raid_nickname,
                         diff: curr.difficulty,
-                        members: [`${curr.prefix}${curr.class_nickname}`],
+                        members: [`${curr.emoji}${curr.prefix}${curr.class_nickname}`],
                         prefixs: [curr.prefix]
                     });
 
                     return prev;
                 }, []);
 
-                return JSON.stringify(
-                    result.filter((res) => members.split("").every((m => res.prefixs.includes(m))))
-                        .map((r) => `${r.raid} ${r.diff} ${r.id}파티 - ${r.members.join(", ")}`),
-                    null,
-                    2
-                );
+                return result.filter((res) => members.split("").every((m => res.prefixs.includes(m))))
+                        .map((r) => `${r.raid} ${r.diff} ${r.id}파티\n${r.members.join(", ")}`).join('\n\n')
             })
             .catch(() => "");
     }
