@@ -51,15 +51,19 @@ const getMember = async ([keyword, ...param] = []) => {
         const html = await axios.get(`https://lostark.game.onstove.com/Profile/Character/${encodeNickName}`);
         const $ = cheerio.load(html.data);
 
-        const charList = await getCharacterList($);
-
-        const charDetailList = await Promise.all(
-            charList.map(async (charName) => {
-                return getCharDetail(charName);
-            })
-        );
-
         try {
+            const dbCharList = await pgClient.query(charDao.list, param);
+            const armoryCharList = await getCharacterList($);
+            
+            const allList = dbCharList.map(c => c.char_name).concat(armoryCharList);
+            const charList = allList.filter((item, index) => allList.indexOf(item) === index);
+
+            const charDetailList = await Promise.all(
+                charList.map(async (charName) => {
+                    return getCharDetail(charName);
+                })
+            );
+            
             await Promise.all(
                 charDetailList.map(async (cd) => {
                     return await pgClient.query(charDao.update, [param[0], cd.userName, cd.job, cd.level]);
