@@ -11,10 +11,10 @@ const getParty = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
     emptyMsg += `!파티 생성 [레이드] [난이도]\n`;
-    emptyMsg += `!파티 목록 [레이드]\n`;
-    
-    emptyMsg += `!파티 참가 [번호] [캐릭명]\n`;
-    emptyMsg += `!파티 탈퇴 [번호] [캐릭명]\n`;
+    emptyMsg += `!파티 목록 [레이드]\n`; 
+
+    emptyMsg += `!파티 참가 [캐릭명] [레이드] [파티장]\n`;
+    emptyMsg += `!파티 탈퇴 [캐릭명] [레이드] [파티장]\n`;
     emptyMsg += `!파티 수정 [번호] [난이도]\n`;
     emptyMsg += `!파티 삭제 [번호]\n\n`;
 

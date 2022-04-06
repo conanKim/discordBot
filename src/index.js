@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { token, adminId, clientId, allowChannelId } = require("./config.json");
+const { token, adminId, clientId, allowChannelId } = require("../config.json");
 const { Client, Intents } = require("discord.js");
 
 const { getUserLevel } = require("./command/level");
