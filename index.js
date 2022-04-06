@@ -1,6 +1,6 @@
 // Require the necessary discord.js classes
 const { token, adminId, clientId, allowChannelId } = require("./config.json");
-const { Client: BotClient, Intents } = require("discord.js");
+const { Client, Intents } = require("discord.js");
 
 const { getUserLevel } = require("./command/level");
 const { getGoldEmbed } = require("./command/gold");
@@ -17,7 +17,7 @@ const PG = require("./dao/index");
 const { adminCommand } = require("./command/admin");
 
 // Create a new client instance
-const bot = new BotClient({
+const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES,
@@ -28,13 +28,18 @@ const bot = new BotClient({
 });
 
 // When the client is ready, run this code (only once)
-bot.once("ready", () => {
+client.once("ready", () => {
     console.log("Ready!");
 });
 
 PG.connect();
 
-bot.on("messageCreate", async (message) => {
+client.on('interactionCreate', interaction => {
+	if (!interaction.isButton()) return;
+	console.log(interaction);
+});
+
+client.on("messageCreate", async (message) => {
     try {
         console.log(message);
         if (message.author.id === clientId) return;
@@ -45,9 +50,9 @@ bot.on("messageCreate", async (message) => {
             return message.content.startsWith(`${prefix}${keyword}`);
         };
 
-        const sendMessage = (str) => {
+        const sendMessage = (str, actions) => {
             if (!str) return message.reply("알 수 없는 오류");
-            message.reply(str);
+            message.reply({content: str, components: actions});
         };
 
         // Exit and stop if it's not there
@@ -145,7 +150,7 @@ bot.on("messageCreate", async (message) => {
     }
 });
 
-bot.on("messageReactionAdd", async (reaction, user) => {
+client.on("messageReactionAdd", async (reaction, user) => {
     // When a reaction is received, check if the structure is partial
     if (reaction.partial) {
         // If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
@@ -166,7 +171,7 @@ bot.on("messageReactionAdd", async (reaction, user) => {
     console.log(`${reaction.count} user(s) have given the same reaction to this message!`);
 });
 
-bot.on("messageReactionRemove", async (reaction, user) => {
+client.on("messageReactionRemove", async (reaction, user) => {
     // When a reaction is received, check if the structure is partial
     if (reaction.partial) {
         // If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled
@@ -188,4 +193,4 @@ bot.on("messageReactionRemove", async (reaction, user) => {
 });
 
 // Login to Discord with your client's token
-bot.login(token);
+client.login(token);

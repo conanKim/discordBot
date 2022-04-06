@@ -1,6 +1,6 @@
-const { Client: PGClient } = require("pg");
+const { Client } = require("pg");
 const { database } = require("../config.json");
-let pgClient;
+let client;
 
 const user = require("./user");
 const raid = require("./raid");
@@ -10,38 +10,38 @@ const party = require("./party");
 const partymember = require("./partymember");
 
 const connect = async () => {
-    pgClient = new PGClient(database);
-    await pgClient.connect();
+    client = new Client(database);
+    await client.connect();
 
     await schema();
 };
 
 const schema = async () => {
-    await pgClient.query(user.init, (err, res) => {
+    await client.query(user.init, (err, res) => {
         console.log(err, res);
     });
 
-    await pgClient.query(raid.init, (err, res) => {
+    await client.query(raid.init, (err, res) => {
         console.log(err, res);
     });
 
-    await pgClient.query(classes.init, (err, res) => {
+    await client.query(classes.init, (err, res) => {
         console.log(err, res);
     });
 
-    await pgClient.query(character.init, (err, res) => {
+    await client.query(character.init, (err, res) => {
         console.log(err, res);
     });
 
-    await pgClient.query(party.init, (err, res) => {
+    await client.query(party.init, (err, res) => {
         console.log(err, res);
     });
 
-    await pgClient.query(partymember.init, (err, res) => {
+    await client.query(partymember.init, (err, res) => {
         console.log(err, res);
     });
 
-    await pgClient.query(classes.update, (err, res) => {
+    await client.query(classes.update, (err, res) => {
         console.log(err, res);
     })
 
@@ -51,7 +51,7 @@ const schema = async () => {
 const query = (query, params) => {
     return new Promise((resolve, reject) => {
         try {
-            return pgClient.query(query, params, (err, res) => {
+            return client.query(query, params, (err, res) => {
                 if (res) {
                     resolve(res.rows);
                 } else {
@@ -66,7 +66,7 @@ const query = (query, params) => {
 };
 
 module.exports = {
-    client: pgClient,
+    client: client,
     query: query,
     connect: connect,
     schema: schema,
