@@ -31,6 +31,11 @@ INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES
 INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('도화가', '아가', '스페셜리스트', '서포터', '<:class_artist:934859881519923250>');
 `;
 
+const SELECT = `
+SELECT *
+FROM classes
+`
+
 const UPDATE = `
 ALTER TABLE classes ADD COLUMN emoji varchar(50);
 
@@ -62,4 +67,5 @@ UPDATE classes SET emoji='<:class_artist:934859881519923250>' WHERE class_name =
 module.exports = {
     init: INIT,
     update: UPDATE,
+    list: SELECT
 };

@@ -1,6 +1,7 @@
 const pgClient = require("../dao");
 const userDao = require("../dao/user");
 const charDao = require("../dao/character");
+const classDao = require("../dao/class");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const { getCharDetail } = require("./level");
@@ -44,10 +45,20 @@ const getMember = async ([keyword, ...param] = []) => {
     if (keyword === "갱신") {
         if (!param[0]) return "갱신할 멤버 이름을 입력해주세요.";
 
+        const logs = [];
+
         try {
             const regCharList = await pgClient.query(charDao.list, param);
             if (!regCharList.length) return "먼저 캐릭터를 하나 이상 등록해주세요.";
     
+            const classData = await pgClient.query(classDao.list);
+            const classObj = classData.reduce((prev, curr) => (
+                {
+                    ...prev, 
+                    [curr.class_name]: curr.emoji
+                }
+            ), {})
+
             const charName = regCharList[0].char_name;
             const encodeNickName = encodeURI(charName);
             const html = await axios.get(`https://lostark.game.onstove.com/Profile/Character/${encodeNickName}`);
@@ -65,10 +76,16 @@ const getMember = async ([keyword, ...param] = []) => {
             
             await Promise.all(
                 charDetailList.map(async (cd) => {
+                    const updatedChar = regCharList.find(char => char.char_name === cd.userName);
+                    if(!updatedChar) {
+                        logs.push(`신규 - ${classObj[cd.job]}${cd.job} ${cd.userName} ${cd.level}`)
+                    } else if (updatedChar.char_level !== cd.level) {
+                        logs.push(`변경 - ${classObj[cd.job]}${cd.job} ${cd.userName} ${updatedChar.char_level} => ${cd.level}`)
+                    }
                     return await pgClient.query(charDao.update, [param[0], cd.userName, cd.job, cd.level]);
                 })
             );
-            return "캐릭터 갱신에 성공했습니다.";
+            return "캐릭터 갱신에 성공했습니다.\n\n" + logs.join("\n");
         } catch (e) {
             return "캐릭터 갱신에 실패했습니다.";
         }
