@@ -76,13 +76,19 @@ const getMember = async ([keyword, ...param] = []) => {
             
             await Promise.all(
                 charDetailList.map(async (cd) => {
-                    const updatedChar = regCharList.find(char => char.char_name === cd.userName);
-                    if(!updatedChar) {
-                        logs.push(`신규 - ${classObj[cd.job]}${cd.job} ${cd.userName} ${cd.level}`)
-                    } else if (updatedChar.char_level !== cd.level) {
-                        logs.push(`변경 - ${classObj[cd.job]}${cd.job} ${cd.userName} ${updatedChar.char_level} => ${cd.level}`)
+                    const updatedChar = regCharList.find(char => char.char_name === cd.name);
+
+                    if(cd.deleted) {
+                        logs.push(`삭제 - ${classObj[updatedChar.class_name]}${updatedChar.class_name} ${updatedChar.char_name}`);
+                        return await pgClient.query(charDao.delete, [updatedChar.char_name]);
                     }
-                    return await pgClient.query(charDao.update, [param[0], cd.userName, cd.job, cd.level]);
+
+                    if(!updatedChar) {
+                        logs.push(`신규 - ${classObj[cd.job]}${cd.job} ${cd.name} ${cd.level}`)
+                    } else if (updatedChar.char_level !== cd.level) {
+                        logs.push(`변경 - ${classObj[cd.job]}${cd.job} ${cd.name} ${updatedChar.char_level} => ${cd.level}`)
+                    }
+                    return await pgClient.query(charDao.update, [param[0], cd.name, cd.job, cd.level]);
                 })
             );
             return "캐릭터 갱신에 성공했습니다.\n\n" + logs.join("\n");

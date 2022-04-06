@@ -1,18 +1,20 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-const getCharDetail = async (nickName) => {
-    const encodeNickName = encodeURI(nickName);
+const getCharDetail = async (name) => {
+    const encodeNickName = encodeURI(name);
     const html = await axios.get(`https://lostark.game.onstove.com/Profile/Character/${encodeNickName}`);
     const $ = cheerio.load(html.data);
-    const userName = $("span.profile-character-info__name").text();
     const levelText = $("div.level-info2>div.level-info2__item span:nth-of-type(2)").text();
+    if (!levelText) {
+        return { name, deleted: true }
+    }
     const level = parseInt(levelText.split(".")[1].replace(",", ""));
 
     const job = $("img.profile-character-info__img").attr("alt");
-    console.log(`캐릭터조회 : ${userName}`);
+    console.log(`캐릭터조회 : ${name}`);
 
-    return { userName, level, job };
+    return { name, level, job };
 };
 const getUserLevel = async (nickName) => {
     if (!nickName) {
