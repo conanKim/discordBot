@@ -44,11 +44,7 @@ const getMember = async ([keyword, ...param] = []) => {
             ), {})
 
             const charName = regCharList[0].char_name;
-            const encodeNickName = encodeURI(charName);
-            const html = await axios.get(`https://lostark.game.onstove.com/Profile/Character/${encodeNickName}`);
-            const $ = cheerio.load(html.data);
-
-            const armoryCharList = await getCharacterList($);
+            const armoryCharList = await getCharacterList(charName);
             const allList = regCharList.map(c => c.char_name).concat(armoryCharList);
             const charList = allList.filter((item, index) => allList.indexOf(item) === index);
 

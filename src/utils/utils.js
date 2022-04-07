@@ -5,6 +5,7 @@ const getCharDetail = async (name) => {
     const encodeNickName = encodeURI(name);
     const html = await axios.get(`https://lostark.game.onstove.com/Profile/Character/${encodeNickName}`);
     const $ = cheerio.load(html.data);
+
     const levelText = $("div.level-info2>div.level-info2__item span:nth-of-type(2)").text();
     if (!levelText) {
         return { name, deleted: true }
@@ -17,7 +18,11 @@ const getCharDetail = async (name) => {
     return { name, level, job };
 };
 
-const getCharacterList = ($) => {
+const getCharacterList = async (charName) => {
+    const encodeNickName = encodeURI(charName);
+    const html = await axios.get(`https://lostark.game.onstove.com/Profile/Character/${encodeNickName}`);
+    const $ = cheerio.load(html.data);
+
     const serverName = $("span.profile-character-info__server").text();
     const serverEl = $("strong.profile-character-list__server")
         .toArray()
