@@ -8,7 +8,6 @@ const { parseCultureCoupon } = require("./command/coupon");
 const { getHomework } = require("./command/homework");
 const { getBreath, setBreath } = require("./command/breath");
 const { calcDutchPay } = require("./command/dutchPay");
-const { joinRaid } = require("./command/raid");
 const { getMember } = require("./command/member");
 const { getCharacter } = require("./command/character");
 const { getParty } = require("./command/party");
@@ -128,11 +127,6 @@ client.on("messageCreate", async (message) => {
 
             case "!문상":
                 sendMessage(parseCultureCoupon(param));
-                break;
-
-            case "!레이드":
-                const raidMessage = await joinRaid(param);
-                sendMessage(raidMessage);
                 break;
 
             case "!관리자":
