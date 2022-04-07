@@ -1,6 +1,38 @@
 const pgClient = require("../dao");
 const adminDao = require("../dao/admin");
 
+const backup = async () => {
+    const fs = require('fs')
+
+    const tables = ['characters', 'classes', 'parties', 'partymembers', 'raids', 'users'];
+
+    await Promise.all(
+        tables.map(async table => await pgClient.query(`SELECT * FROM ${table}`)
+            .then((res) => {
+                return new Promise((resolve, reject) => {
+                    try {
+                        fs.writeFile(`./backups/${table}.txt`, JSON.stringify(res, null, 2), err => {
+                            if (err) {
+                                console.log(err)
+                                return reject();
+                            }
+                            //file written successfully
+                            return resolve();
+                        })
+                    } catch(e) {
+                        console.log(e); 
+                        return "ERROR"
+                    }
+                })
+            }).catch((err) => {
+                console.log(err);
+                return "ERROR"
+            })
+        )
+    )
+    
+}
+
 const adminCommand = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
@@ -15,7 +47,13 @@ const adminCommand = async ([keyword, ...param] = []) => {
             .query(adminDao.reset, param)
             .then(() => pgClient.schema())
             .then(() => "DB가 초기화 되었습니다.")
-            .catch(() => "파티 생성에 실패했습니다.");
+            .catch(() => "DB 초기화에 실패했습니다.");
+    }
+
+    if (keyword === "백업") {
+        return backup()
+            .then(() => "DB백업이 완료되었습니다.")
+            .catch(() => "DB백업에 실패 했습니다.");
     }
 
     return "잘못된 명령어 입니다.";
