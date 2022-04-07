@@ -45,6 +45,10 @@ const schema = async () => {
         console.log(err, res);
     })
 
+    await client.query(raid.updateTable, (err, res) => {
+        console.log(err, res);
+    })
+
     console.log("SCHEMA DONE");
 };
 
