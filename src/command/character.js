@@ -1,22 +1,6 @@
 const pgClient = require("../dao");
 const charDao = require("../dao/character");
 
-const getCharacterList = ($) => {
-    const serverName = $("span.profile-character-info__server").text();
-    const serverEl = $("strong.profile-character-list__server")
-        .toArray()
-        .find((el) => {
-            return el.children[0].data === serverName;
-        }).next.next;
-
-    const charServer = serverEl.children.filter((c) => c.name === "li");
-    return $(charServer)
-        .toArray()
-        .map((el) => {
-            return $(el).find("span")[1].children[0].data;
-        });
-};
-
 const getCharacter = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;

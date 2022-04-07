@@ -4,23 +4,7 @@ const charDao = require("../dao/character");
 const classDao = require("../dao/class");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const { getCharDetail } = require("./level");
-
-const getCharacterList = ($) => {
-    const serverName = $("span.profile-character-info__server").text();
-    const serverEl = $("strong.profile-character-list__server")
-        .toArray()
-        .find((el) => {
-            return el.children[0].data === serverName;
-        }).next.next;
-
-    const charServer = serverEl.children.filter((c) => c.name === "li");
-    return $(charServer)
-        .toArray()
-        .map((el) => {
-            return $(el).find("span")[1].children[0].data;
-        });
-};
+const { getCharDetail, getCharacterList } = require("../utils/utils");
 
 const getMember = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
