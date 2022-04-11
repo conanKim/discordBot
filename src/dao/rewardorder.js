@@ -30,8 +30,8 @@ UPDATE rewardorders
 SET loot_count = loot_count + 1
 WHERE party_id = $1 and reward_name = $2 and user_name = $3;
 `
-const DELETE = `DELETE FROM rewardorders WHERE party_id = $1 and user_name = $2`;
-
+const DELETE = `DELETE FROM rewardorders WHERE party_id = $1 and reward_name = $2 and user_name = $3`;
+const DELETE_BY_REWARD = `DELETE FROM rewardorders WHERE party_id = $1 and reward_name = $2`;
 module.exports = {
     init: INIT,
     create: CREATE,
@@ -41,4 +41,5 @@ module.exports = {
     updateOrder: UPDATE_ORDER,
     increaseLootCount: INCREASE_LOOT_COUNT,
     delete: DELETE,
+    deleteByReward: DELETE_BY_REWARD
 };

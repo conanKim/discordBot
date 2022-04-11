@@ -11,6 +11,7 @@ const { calcDutchPay } = require("./command/dutchPay");
 const { getMember } = require("./command/member");
 const { getCharacter } = require("./command/character");
 const { getParty } = require("./command/party");
+const { getReward } = require("./command/reward");
 
 const PG = require("./dao/index");
 const { adminCommand } = require("./command/admin");
@@ -102,6 +103,10 @@ client.on("messageCreate", async (message) => {
 
             case "!파티":
                 sendMessage(await getParty(param));
+                break;
+
+            case "!품앗이":
+                sendMessage(await getReward(param));
                 break;
 
             case "!레벨":
