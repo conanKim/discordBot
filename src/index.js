@@ -55,7 +55,7 @@ client.on("messageCreate", async (message) => {
             const splited = str.split('\n\n');
             const lastMessage = splited.reduce((prev, curr) => {
                 if(prev.length + curr.length > 2000) {
-                    message.reply({content: str, components: actions});
+                    message.reply({content: prev, components: actions});
                     return curr;
                 } 
                 return prev + curr;
