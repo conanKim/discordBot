@@ -4,7 +4,7 @@ const partyDao = require("../dao/party");
 const partyMemberDao = require("../dao/partymember");
 
 const generatePartyEmbed = (title, party) => {
-    return `${title}\n\n` + party.map((p) => `${p.raid} ${p.diff} ${p.id}파티\n${p.members.join(" ")}`).join('\n\n')
+    return `${title}\n\n` + party.map((p) => `${p.raid}${p.diff ? " " + p.diff : ""} ${p.id}파티\n${p.members.join(" ")}`).join('\n\n')
 }
 
 const getParty = async ([keyword, ...param] = []) => {
@@ -26,8 +26,8 @@ const getParty = async ([keyword, ...param] = []) => {
 
     if (keyword === "생성") {
         return pgClient
-            .query(partyDao.create, param)
-            .then((res) => `${param[0]} ${param[1]} ${res[0].party_id}파티 생성에 성공했습니다.`)
+            .query(partyDao.create, [param[0], param[1] || null])
+            .then((res) => `${param.join(" ")} ${res[0].party_id}파티 생성에 성공했습니다.`)
             .catch(() => "파티 생성에 실패했습니다.");
     }
 
@@ -40,7 +40,7 @@ const getParty = async ([keyword, ...param] = []) => {
 
     if (keyword === "수정") {
         return pgClient
-            .query(partyDao.update, param)
+            .query(partyDao.update, [param[0], param[1] || null])
             .then(() => "파티 수정에 성공했습니다.")
             .catch(() => "파티 수정에 실패했습니다.");
     }
