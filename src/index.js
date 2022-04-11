@@ -52,7 +52,16 @@ client.on("messageCreate", async (message) => {
 
         const sendMessage = (str, actions) => {
             if (!str) return message.reply("알 수 없는 오류");
-            message.reply({content: str, components: actions});
+            const splited = str.split('\n\n');
+            const lastMessage = splited.reduce((prev, curr) => {
+                if(prev.length + curr.length > 2000) {
+                    message.reply({content: str, components: actions});
+                    return curr;
+                } 
+                return prev + curr;
+            }, "")
+
+            message.reply({content: lastMessage, components: actions});
         };
 
         // Exit and stop if it's not there
