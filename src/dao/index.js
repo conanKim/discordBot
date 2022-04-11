@@ -8,6 +8,8 @@ const classes = require("./class");
 const character = require("./character");
 const party = require("./party");
 const partymember = require("./partymember");
+const reward = require("./reward");
+const rewardorders = require("./rewardorder");
 
 const connect = async () => {
     client = new Client(database);
@@ -41,6 +43,14 @@ const schema = async () => {
         console.log(err, res);
     });
 
+    await client.query(reward.init, (err, res) => {
+        console.log(err, res);
+    });
+
+    await client.query(rewardorders.init, (err, res) => {
+        console.log(err, res);
+    });
+
     await client.query(classes.update, (err, res) => {
         console.log(err, res);
     })
@@ -53,6 +63,7 @@ const schema = async () => {
 };
 
 const query = (query, params) => {
+    console.log(`QUERY : ${query}`)
     return new Promise((resolve, reject) => {
         try {
             return client.query(query, params, (err, res) => {
