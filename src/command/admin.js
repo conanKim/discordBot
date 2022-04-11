@@ -4,7 +4,15 @@ const adminDao = require("../dao/admin");
 const backup = async () => {
     const fs = require('fs')
 
-    const tables = ['characters', 'classes', 'parties', 'partymembers', 'raids', 'users'];
+    const tables = await pgClient.query(adminDao.dbList)
+    .then((tables) => tables.map(table => table.table_name))
+    .catch(() => null);
+    
+    if(!tables) {
+        return "ERROR";
+    }
+
+    console.log(tables);
 
     await Promise.all(
         tables.map(async table => await pgClient.query(`SELECT * FROM ${table}`)
