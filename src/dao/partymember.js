@@ -24,6 +24,7 @@ const DELETE = `DELETE FROM partymembers WHERE party_id = $1 and char_name = $2`
 module.exports = {
     init: INIT,
     create: CREATE,
+    createExpedition: CREATE_EXPEDITION,
     list: SELECT,
     listByParty: SELECT_BY_PARTY,
     listByChar: SELECT_BY_CHAR,

@@ -52,6 +52,13 @@ const getParty = async ([keyword, ...param] = []) => {
             .catch(() => "파티 참가에 실패했습니다.");
     }
 
+    if (keyword === "원정대참가") {
+        return pgClient
+            .query(partyMemberDao.createExpedition, param)
+            .then(() => "파티 참가에 성공했습니다.")
+            .catch(() => "파티 참가에 실패했습니다.");
+    }
+
     if (keyword === "목록") {
         if(!param[0]) return "레이드 명을 입력해주세요."
         return pgClient
