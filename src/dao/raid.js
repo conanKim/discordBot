@@ -3,10 +3,10 @@ const INIT = `CREATE TABLE IF NOT EXISTS raids (
     raid_nickname varchar (10) unique not null,
     personnel integer not null,
     is_expedition boolean,
-    PRIMARY KEY (raid_nickname);
-
-    ALTER TABLE raids ALTER COLUMN is_expedition SET DEFAULT false;
+    PRIMARY KEY (raid_nickname)
 );
+
+ALTER TABLE raids ALTER COLUMN is_expedition SET DEFAULT false;
 
 INSERT INTO raids VALUES ('카양겔', '카양겔', 4, false);
 INSERT INTO raids VALUES ('아브렐슈드', '아브', 8, false);

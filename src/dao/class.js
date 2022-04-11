@@ -3,6 +3,7 @@ const INIT = `CREATE TABLE IF NOT EXISTS classes (
     class_nickname varchar(4) NOT NULL,
     root_class varchar(50) NOT NULL,
     type varchar(50) NOT NULL,
+    emoji varchar(50),
 
     PRIMARY KEY (class_name)
 );
@@ -37,7 +38,7 @@ FROM classes
 `
 
 const UPDATE = `
-ALTER TABLE classes ADD COLUMN emoji varchar(50);
+ALTER TABLE classes ADD COLUMN IF NOT EXISTS emoji varchar(50);
 
 
 UPDATE classes SET emoji='<:class_destroyer:934859881461215302>' WHERE class_name = '디스트로이어';
