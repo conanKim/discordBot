@@ -54,11 +54,11 @@ client.on("messageCreate", async (message) => {
             if (!str) return message.reply("알 수 없는 오류");
             const splited = str.split('\n\n');
             const lastMessage = splited.reduce((prev, curr) => {
-                if(prev.length + curr.length > 2000) {
+                if(prev.length + curr.length + 4 > 2000) {
                     message.reply({content: prev, components: actions});
                     return curr;
                 } 
-                return prev + curr;
+                return prev + "\n\n" + curr;
             }, "")
 
             message.reply({content: lastMessage, components: actions});
