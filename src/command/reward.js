@@ -48,7 +48,7 @@ const getReward = async ([keyword, ...param] = []) => {
     if (keyword === "삭제") {
         return pgClient
             .query(rewardOrderDao.deleteByReward, param)
-            .query(rewardDao.delete, param)
+            .then(() => pgClient.query(rewardDao.delete, param))
             .then(() => "품앗이 삭제에 성공했습니다.")
             .catch(() => "품앗이 삭제에 실패했습니다.");
     }
