@@ -40,6 +40,20 @@ client.on('interactionCreate', interaction => {
 });
 
 client.on("messageCreate", async (message) => {
+    const sendMessage = (str, actions) => {
+        if (!str) return message.reply("알 수 없는 오류");
+        const splited = str.split('\n\n');
+        const lastMessage = splited.reduce((prev, curr) => {
+            if(prev.length + curr.length + 4 > 2000) {
+                message.reply({content: prev, components: actions});
+                return curr;
+            } 
+            return prev + "\n\n" + curr;
+        }, "")
+
+        message.reply({content: lastMessage, components: actions});
+    };
+
     try {
         console.log(message);
         if (message.author.id === clientId) return;
@@ -48,20 +62,6 @@ client.on("messageCreate", async (message) => {
         const isCommand = (keyword = "") => {
             const prefix = "!";
             return message.content.startsWith(`${prefix}${keyword}`);
-        };
-
-        const sendMessage = (str, actions) => {
-            if (!str) return message.reply("알 수 없는 오류");
-            const splited = str.split('\n\n');
-            const lastMessage = splited.reduce((prev, curr) => {
-                if(prev.length + curr.length + 4 > 2000) {
-                    message.reply({content: prev, components: actions});
-                    return curr;
-                } 
-                return prev + "\n\n" + curr;
-            }, "")
-
-            message.reply({content: lastMessage, components: actions});
         };
 
         // Exit and stop if it's not there
