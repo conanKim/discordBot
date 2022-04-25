@@ -25,6 +25,7 @@ const getCharacter = async ([keyword, ...param] = []) => {
             .query(charDao.list, param)
             .then((res) =>
                 res
+		    .filter((char) => char.char_level > 1300)
                     .sort((a, b) => b.char_level - a.char_level)
                     .map((char) => `${char.emoji}${char.char_name} - ${char.char_level} ${char.class_name}`)
                     .join("\n")
