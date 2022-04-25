@@ -43,7 +43,14 @@ const getMember = async ([keyword, ...param] = []) => {
                 }
             ), {})
 
-            const charName = regCharList[0].char_name;
+            const charName = regCharList
+                .reduce((curr, prev) => {
+                    return curr.char_level > prev.char_level ? curr : prev
+                }, { char_level: -Infinity })
+                .char_name;
+
+            console.log(`최고 레벨 캐릭터 : ${charName}`);
+
             const armoryCharList = await getCharacterList(charName);
             const allList = regCharList.map(c => c.char_name).concat(armoryCharList);
             const charList = allList.filter((item, index) => allList.indexOf(item) === index);
