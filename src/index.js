@@ -57,7 +57,6 @@ client.on("messageCreate", async (message) => {
     try {
         console.log(message);
         if (message.author.id === clientId) return;
-        if (!allowChannelId.includes(message.channelId)) return;
 
         const isCommand = (keyword = "") => {
             const prefix = "!";
@@ -68,6 +67,8 @@ client.on("messageCreate", async (message) => {
         if (!isCommand()) return;
 
         const [keyword, ...param] = message.content.split(" ");
+        
+        if (!allowChannelId.includes(message.channelId) && !allowKeyword.includes(keyword)) return;
 
         if (`!${parseInt(keyword.substring(1))}` === keyword) {
             sendMessage(calcDutchPay([parseInt(keyword.substring(1))]));
