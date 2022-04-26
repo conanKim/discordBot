@@ -9,6 +9,7 @@ const { getHomework } = require("./command/homework");
 const { getBreath, setBreath } = require("./command/breath");
 const { calcDutchPay } = require("./command/dutchPay");
 const { getMember } = require("./command/member");
+const { getRoster } = require("./command/roster");
 const { getCharacter } = require("./command/character");
 const { getParty } = require("./command/party");
 const { getReward } = require("./command/reward");
@@ -101,8 +102,8 @@ client.on("messageCreate", async (message) => {
             case "!주사위":
                 const max = param[0] || 100;
                 const score = Math.ceil(Math.random() * max);
-                    sendMessage(`주사위 ${max}\n결과 : ${score}`);
-                    break;
+                sendMessage(`주사위 ${max}\n결과 : ${score}`);
+                break;
                 
             case "!확률":
                 const rate = Math.floor(Math.random() * 101);
@@ -115,6 +116,10 @@ client.on("messageCreate", async (message) => {
 
             case "!멤버":
                 sendMessage(await getMember(param));
+                break;
+
+            case "!원정대":
+                sendMessage(await getRoster(param));
                 break;
 
             case "!캐릭터":
