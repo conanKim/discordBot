@@ -1,10 +1,5 @@
 const pgClient = require("../dao");
 const userDao = require("../dao/user");
-const charDao = require("../dao/character");
-const classDao = require("../dao/class");
-const axios = require("axios");
-const cheerio = require("cheerio");
-const { getCharDetail, getCharacterList } = require("../utils/utils");
 
 const getMember = async ([keyword, ...param] = []) => {
     let emptyMsg = "";

@@ -1,6 +1,9 @@
 const pgClient = require("../dao");
 const charDao = require("../dao/character");
 
+const classDao = require("../dao/class");
+const { getCharDetail, getCharacterList } = require("../utils/utils");
+
 const getRoster = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
