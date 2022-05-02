@@ -12,6 +12,7 @@ const getParty = async ([keyword, ...param] = []) => {
     emptyMsg += `사용법\n`;
     emptyMsg += `!파티 생성 [레이드] [난이도]\n`;
     emptyMsg += `!파티 목록 [레이드]\n`; 
+    emptyMsg += `!파티 찾기 [단축닉] [?레이드] ex) !파티 찾기 네앙아, !파티 찾기 네메 쿠크\n`; 
 
     emptyMsg += `!파티 참가 [캐릭명] [레이드] [파티장]\n`;
     emptyMsg += `!파티 탈퇴 [캐릭명] [레이드] [파티장]\n`;
@@ -87,7 +88,9 @@ const getParty = async ([keyword, ...param] = []) => {
     }
 
     if (keyword === "찾기") {
-        const [members, ...raid] = param;
+        const [members, ...raid] = param.filter(p => !p.startsWith("-"));
+        const ignoreMembers = (param.find(p => p.startsWith("-")) || "-").substring(1);
+
         query = raid.length === 0 ? partyDao.listAll : partyDao.listByRaid;
         return pgClient
             .query(query, raid)
@@ -109,7 +112,9 @@ const getParty = async ([keyword, ...param] = []) => {
                     });
 
                     return prev;
-                }, []).filter((res) => members.split("").every(m => res.prefixs.includes(m)));
+                }, [])
+                .filter((res) => members.split("").every(m => res.prefixs.includes(m)))
+                .filter((res) => ignoreMembers.split("").every(m => !res.prefixs.includes(m)));
 
                 return generatePartyEmbed(`파티 찾기 - ${param[0]}`, result)
             })
