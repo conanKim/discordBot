@@ -69,12 +69,12 @@ client.on("messageCreate", async (message) => {
 
         const [keyword, ...param] = message.content.split(" ");
         
-        if (!allowChannelId.includes(message.channelId) && !allowKeyword.includes(keyword.substring(1))) return;
-
         if (`!${parseInt(keyword.substring(1))}` === keyword) {
             sendMessage(calcDutchPay([parseInt(keyword.substring(1))]));
             return;
         }
+
+        if (!allowChannelId.includes(message.channelId) && !allowKeyword.includes(keyword.substring(1))) return;
 
         switch (keyword) {
             case "!ping":
