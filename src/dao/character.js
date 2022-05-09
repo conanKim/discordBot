@@ -24,10 +24,17 @@ SET (class_name, char_level) = (excluded.class_name, excluded.char_level)
 `;
 const DELETE = `DELETE FROM characters WHERE char_name = $1`;
 
+const RANK = `
+SELECT *
+FROM characters crt, classes c, users u
+WHERE crt.user_name = u.user_name AND crt.class_name = c.class_name
+ORDER BY crt.char_level DESC;
+`;
 module.exports = {
     init: INIT,
     create: CREATE,
     list: SELECT,
+    rank: RANK,
     update: UPDATE,
     delete: DELETE,
 };
