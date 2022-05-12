@@ -5,7 +5,7 @@ const getCharacter = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
     emptyMsg += `!캐릭터 등록 [멤버] [캐릭명] [직업] [레벨]\n`;
-    emptyMsg += `!캐릭터 순위 [?직업]\n`;
+    emptyMsg += `!캐릭터 목록 [?직업]\n`;
     emptyMsg += `!캐릭터 삭제 [캐릭명]\n`;
 
     if (!keyword) {
@@ -26,13 +26,15 @@ const getCharacter = async ([keyword, ...param] = []) => {
             .catch(() => "실패");
     }
 
-    if (keyword === "순위") {
+    if (keyword === "목록") {
+        console.log(param)
         return pgClient
-            .query(charDao.rank, param)
+            .query(charDao.rank)
             .then((res) => {
                 console.log(res);
                 return res
                     .filter((char) => char.char_level > 1300)
+                    .filter((char) => param[0] ? char.class_nickname === param[0] || char.class_name === param[0] : true)
                     .slice(0, 10)
                     .map(
                         (char, index) =>
