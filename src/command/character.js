@@ -25,7 +25,7 @@ const getCharacter = async ([keyword, ...param] = []) => {
             .then((res) => {
                 return res
                     .filter((char) => char.char_level > 1300)
-                    .filter((char) => !param[0] || (char.class_nickname === param[0] || char.class_name === param[0]))
+                    .filter((char) => !param[0] || (char.class_nickname === param[0] || char.class_name === param[0]) || char.type === param[0])
                     .slice(0, 10)
                     .map(
                         (char, index) =>
