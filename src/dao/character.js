@@ -8,7 +8,7 @@ const INIT = `CREATE TABLE IF NOT EXISTS characters (
     PRIMARY KEY (char_name)
 );`;
 
-const CREATE = `INSERT INTO characters (user_name, char_name, class_name, char_level) VALUES ($1, $2, $3, $4);`;
+const CREATE = `INSERT INTO characters (user_name, char_name, class_name, char_level) VALUES ($1, $2, $3, 0);`;
 const SELECT = `
 SELECT *
 FROM characters crt, classes c
