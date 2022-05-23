@@ -29,7 +29,43 @@ const client = new Client({
 });
 
 // When the client is ready, run this code (only once)
-client.once("ready", () => {
+client.once("ready", async () => {
+    let day = new Date();
+    let week = day.getDay();
+
+    const leftDay = week < 3 ? 3 - week : 10 - week;
+    const leftSecond = leftDay * 60 * 60 * 24;
+    const currentSecond = day.getSeconds() + day.getMinutes() * 60 + day.getHours() * 60 * 60;
+    // const currentSecond = leftSecond - 1;
+
+    const roasterUpdate = async () => {
+        const channel = client.channels.cache.get('933685196056854533');
+
+        const memberStr = await getMember(["조회"]);
+        const memberList = JSON.parse(memberStr);
+
+        memberList.forEach(async member => {
+            const str = await getRoster(["갱신", member.user_name])
+            if (!str) return message.reply("알 수 없는 오류");
+            const splited = str.split('\n\n');
+            const lastMessage = splited.reduce((prev, curr) => {
+                if(prev.length + curr.length + 4 > 2000) {
+                    message.reply({content: prev, components: actions});
+                    return curr;
+                } 
+                return prev + "\n\n" + curr;
+            }, "")
+        
+            return await channel.send(`${lastMessage}`);
+        })
+    }
+
+    setTimeout(async () => {
+            setInterval(roasterUpdate, 60 * 60 * 24 * 7);
+            return roasterUpdate();
+        }
+    , (leftSecond - currentSecond) * 1000);
+    
     console.log("Ready!");
 });
 

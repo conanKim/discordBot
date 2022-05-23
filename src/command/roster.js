@@ -79,7 +79,7 @@ const getRoster = async ([keyword, ...param] = []) => {
                     return await pgClient.query(charDao.update, [param[0], cd.name, cd.job, cd.level]);
                 })
             );
-            return "원정대 갱신에 성공했습니다.\n\n" + logs.join("\n");
+            return `${param[0]}의 원정대 갱신에 성공했습니다.\n\n` + logs.join("\n");
         } catch (e) {
             return "원정대 갱신에 실패했습니다.";
         }
