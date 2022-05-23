@@ -17,7 +17,7 @@ INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES
 INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('창술사', '창술', '무도가', '딜러', '<:class_lancemaster:934859881977098290>');
 INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('스트라이커', '스커', '무도가', '딜러', '<:class_striker:934859881683496980>');
 INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('데빌헌터', '데헌', '헌터', '딜러', '<:class_devilhunter:934859881448636486>');
-INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('블래스터', '밥통', '헌터', '딜러', '<:class_blaster:934859881259868201>');
+INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('블래스터', '블래', '헌터', '딜러', '<:class_blaster:934859881259868201>');
 INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('호크아이', '호크', '헌터', '딜러', '<:class_hawkeye:934859881289232405>');
 INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('스카우터', '스카', '헌터', '딜러', '<:class_scouter:934859881545076746>');
 INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('건슬링어', '건슬', '헌터', '딜러', '<:class_gunslinger:934859881524125736>');
@@ -63,6 +63,8 @@ UPDATE classes SET emoji='<:class_reaper:934859881452810311>' WHERE class_name =
 UPDATE classes SET emoji='<:class_bard:934859881134043197>' WHERE class_name = '바드';
 UPDATE classes SET emoji='<:class_holyknight:934859881494765658>' WHERE class_name = '홀리나이트';
 UPDATE classes SET emoji='<:class_artist:934859881519923250>' WHERE class_name = '도화가';
+
+UPDATE classes SET class_nickname='블래' where class_name = '블래스터';
 `
 
 module.exports = {
