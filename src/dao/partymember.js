@@ -20,6 +20,7 @@ const SELECT_BY_PARTY = `SELECT * FROM partymembers WHERE party_id = $1;`;
 const SELECT_BY_CHAR = `SELECT * FROM partymembers WHERE char_name = $1;`;
 const SELECT_BY_MEMBER = `SELECT * FROM partymembers WHERE char_name = $1;`;
 const DELETE = `DELETE FROM partymembers WHERE party_id = $1 and char_name = $2`;
+const SECESSION = `DELETE FROM partymembers pm using characters c WHERE c.char_name = pm.char_name and c.user_name = $1`;
 
 module.exports = {
     init: INIT,
@@ -30,4 +31,5 @@ module.exports = {
     listByChar: SELECT_BY_CHAR,
     listByMember: SELECT_BY_MEMBER,
     delete: DELETE,
+    secession: SECESSION
 };

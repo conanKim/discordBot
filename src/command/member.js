@@ -1,5 +1,8 @@
 const pgClient = require("../dao");
 const userDao = require("../dao/user");
+const partymemberDao = require("../dao/partymember");
+const rewardorderDao = require("../dao/rewardorder");
+const characterDao = require("../dao/character")
 
 const getMember = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
@@ -31,6 +34,15 @@ const getMember = async ([keyword, ...param] = []) => {
             .query(userDao.delete, param)
             .then(() => "멤버 삭제에 성공했습니다.")
             .catch(() => "멤버 삭제에 실패했습니다.");
+    }
+    if (keyword === "탈퇴") {
+        return pgClient
+            .query(partymemberDao.secession, param)
+            .then(() => pgClient.query(rewardorderDao.secession, param))
+            .then(() => pgClient.query(characterDao.secession, param))
+            .then(() => pgClient.query(userDao.delete, param))
+            .then(() => "멤버 탈퇴에 성공했습니다.")
+            .catch(() => "멤버 탈퇴에 실패했습니다.");
     }
 
     return emptyMsg;

@@ -32,6 +32,8 @@ WHERE party_id = $1 and reward_name = $2 and user_name = $3;
 `
 const DELETE = `DELETE FROM rewardorders WHERE party_id = $1 and reward_name = $2 and user_name = $3`;
 const DELETE_BY_REWARD = `DELETE FROM rewardorders WHERE party_id = $1 and reward_name = $2`;
+const SECESSION = `DELETE FROM rewardorders WHERE user_name = $1`;
+
 module.exports = {
     init: INIT,
     create: CREATE,
@@ -41,5 +43,6 @@ module.exports = {
     updateOrder: UPDATE_ORDER,
     increaseLootCount: INCREASE_LOOT_COUNT,
     delete: DELETE,
-    deleteByReward: DELETE_BY_REWARD
+    deleteByReward: DELETE_BY_REWARD,
+    secession: SECESSION
 };

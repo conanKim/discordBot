@@ -30,6 +30,9 @@ FROM characters crt, classes c, users u
 WHERE crt.user_name = u.user_name AND crt.class_name = c.class_name
 ORDER BY crt.char_level DESC;
 `;
+
+const SECESSION = `DELETE FROM characters WHERE user_name = $1`
+
 module.exports = {
     init: INIT,
     create: CREATE,
@@ -37,4 +40,5 @@ module.exports = {
     rank: RANK,
     update: UPDATE,
     delete: DELETE,
+    secession: SECESSION
 };
