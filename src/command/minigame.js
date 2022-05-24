@@ -43,6 +43,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
             let emptyMsg = "";
             emptyMsg += `사용법\n`;
             emptyMsg += `!재련\n`;
+            emptyMsg += `!재련 참가\n`;
             emptyMsg += `!재련 조회\n`;
             emptyMsg += `!재련 랭킹\n`;
         
@@ -74,7 +75,27 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
         }
 
         if(param[0] === "랭킹") {
-            //TODO
+            return pgClient
+                .query(minigameDao.selectAll)
+                .then((res) => {
+                    res.sort((a, b) => {
+                        if (a.refine_level > b.refine_level) return 1;
+                        if (a.refine_level < b.refine_level) return -1;
+
+                        if (a.try_count > b.try_count) return 1;
+                        if (a.try_count < b.try_count) return -1;
+
+                        return 0;
+                    })
+
+                    return res.map(refine => {
+                        const itemColor = refine.refine_level < 20 ? "유물" : "고대";
+                        const refineLevel = refine.refine_level < 20 ? refine.refine_level : refine.refine_level - 8;
+
+                        return `[${itemColor}] ${refineLevel}강 (장기 ${Math.round(Math.min(refine.try_count * refineData[refine.refine_level][3], 1) * 10000) / 100}%) - ${refine.user_name}`
+                    }).join("\n");
+                })
+                .catch(() => `랭킹 조회에 실패했습니다.`)
             return "아직 지원되지 않는 기능입니다."
         }
 
