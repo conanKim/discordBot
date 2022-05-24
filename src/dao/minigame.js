@@ -6,6 +6,7 @@ const INIT = `CREATE TABLE IF NOT EXISTS minigames (
 );
 
 ALTER TABLE minigames ADD COLUMN last_execute_time varchar(50);
+ALTER TABLE minigames ADD CONSTRAINT discord_id PRIMARY KEY(discord_id);
 `
 
 const JOIN = `INSERT INTO minigames (discord_id, refine_level, try_count, last_execute_time) VALUES ($1, 0, 0, '0');`
