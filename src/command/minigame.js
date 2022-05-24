@@ -37,7 +37,7 @@ const refineData = [
     [0.005, 0.0005, 0.01, 0.0023, 0.025], //+24
 ]
 
-const minigame = async ([keyword, ...param] = [], discordId) => {
+const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => {
     console.log(keyword);
     if(keyword === "!재련") {
         console.log(1);
@@ -108,6 +108,10 @@ const minigame = async ([keyword, ...param] = [], discordId) => {
                     if(refine.refine_level + 1 === 20) {
                         message += `[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.\n` 
                     }
+                    
+                    if(refine.refine_level + 1 > 28) {
+                        noticeCallback(`[${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.`);
+                    }
                     return message;
                 })
                 .catch(() => {})
@@ -127,14 +131,23 @@ const minigame = async ([keyword, ...param] = [], discordId) => {
                         message += `[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.\n` 
                     }
                     console.log(message);
+
+                    if(refine.refine_level + 1 > 28) {
+                        noticeCallback(`[${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.`);
+                    }
+
                     return message;
                 })
                 .catch(() => {})
         } else if(dice > 1 - destroyRate) {
             return pgClient
                 .query(minigameDao.refineReset, [discordId])
-                .then((res) => `${destroyRate * 100}% 확률을 뚫고 장비가 파괴되었습니다.`)
-                .catch(() => `${destroyRate * 100}% 확률을 뚫고 장비가 파괴될뻔 했지만 서버오류로 한번만 봐드립니다.`)
+                .then((res) => {
+                    
+                    noticeCallback(`[${itemColor}] ${refineLevel}강에서 장비가 파괴되었습니다.`);
+                    return `[${itemColor}] ${refineLevel}강에서 ${destroyRate * 100}% 확률을 뚫고 장비가 파괴되었습니다.`
+                })
+                .catch(() => `[${itemColor}] ${refineLevel}강에서 ${destroyRate * 100}% 확률을 뚫고 장비가 파괴될뻔 했지만 서버오류로 한번만 봐드립니다.`)
         } else {
             const nextEnergy = Math.min(energy * (refine.try_count + 1), 1);
 

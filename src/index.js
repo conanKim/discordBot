@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { token, adminId, clientId, allowChannelId, allowKeyword, gameChannelId } = require("../config.json");
+const { token, adminId, clientId, allowChannelId, allowKeyword, gameChannelId, generalChannelId } = require("../config.json");
 const { Client, Intents } = require("discord.js");
 
 const { getUserLevel } = require("./command/level");
@@ -80,7 +80,13 @@ client.on("messageCreate", async (message) => {
                 return;
             }
 
-            return sendMessage(await minigame([keyword, ...param], message.author.id))
+            const noticeCallback = async (message) => {
+                const channel = client.channels.cache.get(generalChannelId);
+
+                await channel.send(`${message.author.username}님께서 ${message}`);
+            }
+
+            return sendMessage(await minigame([keyword, ...param], message.author.id, noticeCallback))
         }
 
         if (!allowChannelId.includes(message.channelId) && !allowKeyword.includes(keyword.substring(1))) return;
