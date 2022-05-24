@@ -11,7 +11,7 @@ ALTER TABLE minigames ADD COLUMN last_execute_time varchar(50);
 const JOIN = `INSERT INTO minigames (discord_id, refine_level, try_count, last_execute_time) VALUES ($1, 0, 0, '0');`
 
 const SELECT = `SELECT * FROM minigames WHERE discord_id = $1`
-const SELECT_ALL = `SELECT * FROM minigames mg, users u WHERE u.discord_id IS NOT NULL and mg.discord_id = u.discord_id`
+const SELECT_ALL = `SELECT * FROM minigames mg, users u WHERE mg.discord_id = u.discord_id`
 
 const REFINE_FAILED = `
     UPDATE minigames 
@@ -38,6 +38,10 @@ const REFINE_RESET = `
     WHERE discord_id = $1
 `
 
+const REFINE_DELTE = `
+    DELETE FROM minigames WHERE discord_id = $1
+`
+
 module.exports = {
     init: INIT,
     join: JOIN,
@@ -45,5 +49,6 @@ module.exports = {
     selectAll: SELECT_ALL,
     refineFailed: REFINE_FAILED,
     refineSuccess: REFINE_SUCCESS,
-    refineReset: REFINE_RESET
+    refineReset: REFINE_RESET,
+    delete: REFINE_DELTE
 };

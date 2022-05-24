@@ -74,6 +74,13 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                 .catch(() => "재련 수치 조회에 실패했습니다.")
         }
 
+        if(param[0] === "퇴장") {
+            return pgClient
+                .query(minigameDao.delete, [discordId])
+                .then((res) => `재련 게임에 퇴장했습니다.`)
+                .catch(() => `재련게임 퇴장에 실패했습니다.`)
+        }
+
         if(param[0] === "랭킹") {
             return pgClient
                 .query(minigameDao.selectAll)
@@ -96,7 +103,6 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                     }).join("\n");
                 })
                 .catch(() => `랭킹 조회에 실패했습니다.`)
-            return "아직 지원되지 않는 기능입니다."
         }
 
         if(param[0] === "초기화") {
