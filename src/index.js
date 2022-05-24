@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { token, adminId, clientId, allowChannelId, allowKeyword } = require("../config.json");
+const { token, adminId, clientId, allowChannelId, allowKeyword, gameChannelId } = require("../config.json");
 const { Client, Intents } = require("discord.js");
 
 const { getUserLevel } = require("./command/level");
@@ -101,6 +101,10 @@ client.on("messageCreate", async (message) => {
                 break;
 
             case "!재련":
+                if(!gameChannelId.includes(message.channelId)) {
+                    return;
+                }
+
                 sendMessage(await minigame([keyword, ...param], message.author.id))
                 break;
 
