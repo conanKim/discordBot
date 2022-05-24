@@ -38,9 +38,7 @@ const refineData = [
 ]
 
 const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => {
-    console.log(keyword);
     if(keyword === "!재련") {
-        console.log(1);
         if(param[0] === "도움말") {
             let emptyMsg = "";
             emptyMsg += `사용법\n`;
@@ -82,16 +80,20 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
 
         if(param[0] === "초기화") {
             return pgClient
-                .query(minigameDao.refineReset, [discordId])
+                .query(minigameDao.refineReset, [discordId, 0])
                 .then((res) => `재련 게임을 초기화 했습니다.`)
                 .catch(() => `재련게임 초기화에 실패했습니다.`)
         }
 
         const res = await pgClient.query(minigameDao.select, [discordId])
+
         const refine = res[0];
-        console.log(refine);
+        const elapsedTime = new Date().getTime() - refine.last_execute_time;
+        if(elapsedTime < 1000 * 60) {
+            return `마지막 재련 시도 이후 1분이 지나지 않았습니다. 남은시간 : ${60 - Math.round(elapsedTime/1000)} 초`
+        }
+
         const [baseRate, bonusRate, maxRate, energy, destroyRate] = refineData[refine.refine_level];
-        console.log(baseRate, bonusRate, maxRate, energy);
 
         const itemColor = refine.refine_level < 20 ? "유물" : "고대";
         const refineLevel = refine.refine_level < 20 ? refine.refine_level : refine.refine_level - 8;
@@ -102,7 +104,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
         
         if(energy * refine.try_count > 1) {
             return pgClient
-                .query(minigameDao.refineSuccess, [discordId])
+                .query(minigameDao.refineSuccess, [discordId, new Date().getTime()])
                 .then(() => {
                     let message = `장기백으로 [${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.\n`
                     if(refine.refine_level + 1 === 20) {
@@ -123,14 +125,12 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
             const currentEnergy = energy * refine.try_count;
 
             return pgClient
-                .query(minigameDao.refineSuccess, [discordId])
+                .query(minigameDao.refineSuccess, [discordId, new Date().getTime()])
                 .then(() => {
-                    console.log("SUCCESS");
                     let message = `${Math.round(refineRate * 10000) / 100}% 의 확률을 뚫고 장인의 기운 ${Math.round(currentEnergy * 10000) / 100}% 에서 [${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.\n`
                     if(refine.refine_level + 1 === 20) {
                         message += `[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.\n` 
                     }
-                    console.log(message);
 
                     if(refine.refine_level + 1 > 28) {
                         noticeCallback(`[${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.`);
@@ -141,7 +141,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                 .catch(() => {})
         } else if(dice > 1 - destroyRate) {
             return pgClient
-                .query(minigameDao.refineReset, [discordId])
+                .query(minigameDao.refineReset, [discordId, new Date().getTime()])
                 .then((res) => {
                     
                     noticeCallback(`[${itemColor}] ${refineLevel}강에서 장비가 파괴되었습니다.`);
@@ -152,8 +152,8 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
             const nextEnergy = Math.min(energy * (refine.try_count + 1), 1);
 
             return pgClient
-                .query(minigameDao.refineFailed, [discordId])
-                .then(() => `${Math.round(refineRate * 10000) / 100}% 의 확률을 뚫지 못하고 [${itemColor}] ${refineLevel + 1}강 강화에 실패했습니다. (현재 장인의 기운 ${Math.round(nextEnergy * 10000) / 100}%)`)
+                .query(minigameDao.refineFailed, [discordId, new Date().getTime()])
+                .then(() => `${Math.round(refineRate * 10000) / 100}% 의 확률을 뚫지 못하고 [${itemColor}] ${refineLevel + 1}강 강화에 실패했습니다.\n(현재 장인의 기운 ${Math.round(nextEnergy * 10000) / 100}%)`)
                 .catch(() => {})
         }
     }

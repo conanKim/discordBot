@@ -1,25 +1,31 @@
 const INIT = `CREATE TABLE IF NOT EXISTS minigames (
     discord_id varchar(50) NOT NULL,
     refine_level integer NOT NULL DEFAULT 0,
-    try_count integer NOT NULL DEFAULT 0
+    try_count integer NOT NULL DEFAULT 0,
+    last_execute_time varchar(50) DEFAULT '0'
 );
+
+ALTER TABLE minigames ADD COLUMN last_execute_time varchar(50);
 `
 
-const JOIN = `INSERT INTO minigames (discord_id, refine_level, try_count) VALUES ($1, 0, 0);`
+const JOIN = `INSERT INTO minigames (discord_id, refine_level, try_count, last_execute_time) VALUES ($1, 0, 0, '0');`
 
 const SELECT = `SELECT * FROM minigames WHERE discord_id = $1`
 const SELECT_ALL = `SELECT * FROM minigames`
 
 const REFINE_FAILED = `
     UPDATE minigames 
-    SET try_count = try_count + 1 
+    SET 
+        try_count = try_count + 1,
+        last_execute_time = $2
     WHERE discord_id = $1`
 
 const REFINE_SUCCESS = `
     UPDATE minigames 
     SET 
         try_count = 0, 
-        refine_level = refine_level + 1 
+        refine_level = refine_level + 1,
+        last_execute_time = $2
     WHERE discord_id = $1
 `
 
@@ -27,7 +33,8 @@ const REFINE_RESET = `
     UPDATE minigames
     SET 
         try_count = 0,
-        refine_level = 0
+        refine_level = 0,
+        last_execute_time = $2
     WHERE discord_id = $1
 `
 
