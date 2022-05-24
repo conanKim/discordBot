@@ -16,6 +16,7 @@ const { getReward } = require("./command/reward");
 
 const PG = require("./dao/index");
 const { adminCommand } = require("./command/admin");
+const { minigame } = require("./command/minigame");
 
 // Create a new client instance
 const client = new Client({
@@ -99,6 +100,10 @@ client.on("messageCreate", async (message) => {
                 sendMessage(calcDutchPay(param));
                 break;
 
+            case "!재련":
+                sendMessage(await minigame([keyword, ...param], message.author.id))
+                break;
+
             case "!주사위":
                 const max = param[0] || 100;
                 const score = Math.ceil(Math.random() * max);
@@ -115,7 +120,7 @@ client.on("messageCreate", async (message) => {
                 break;
 
             case "!멤버":
-                sendMessage(await getMember(param));
+                sendMessage(await getMember([...param, message.author.id]));
                 break;
 
             case "!원정대":

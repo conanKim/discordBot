@@ -10,6 +10,7 @@ const party = require("./party");
 const partymember = require("./partymember");
 const reward = require("./reward");
 const rewardorders = require("./rewardorder");
+const minigames = require("./minigame");
 
 const connect = async () => {
     client = new Client(database);
@@ -48,6 +49,10 @@ const schema = async () => {
     });
 
     await client.query(rewardorders.init, (err, res) => {
+        console.log(err, res);
+    });
+
+    await client.query(minigames.init, (err, res) => {
         console.log(err, res);
     });
 

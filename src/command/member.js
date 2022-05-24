@@ -44,6 +44,12 @@ const getMember = async ([keyword, ...param] = []) => {
             .then(() => "멤버 탈퇴에 성공했습니다.")
             .catch(() => "멤버 탈퇴에 실패했습니다.");
     }
+    if (keyword === "인증") {
+        return pgClient
+            .query(userDao.authenticate, param)
+            .then(() => "멤버 인증에 성공했습니다.")
+            .catch(() => "멤버 인증에 실패했습니다.");
+    }
 
     return emptyMsg;
 };
