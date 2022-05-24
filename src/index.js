@@ -75,6 +75,14 @@ client.on("messageCreate", async (message) => {
             return;
         }
 
+        if (keyword === "!재련") {
+            if(!gameChannelId.includes(message.channelId)) {
+                return;
+            }
+
+            return sendMessage(await minigame([keyword, ...param], message.author.id))
+        }
+
         if (!allowChannelId.includes(message.channelId) && !allowKeyword.includes(keyword.substring(1))) return;
 
         switch (keyword) {
@@ -98,14 +106,6 @@ client.on("messageCreate", async (message) => {
             case "!N":
             case "!ㅜ":
                 sendMessage(calcDutchPay(param));
-                break;
-
-            case "!재련":
-                if(!gameChannelId.includes(message.channelId)) {
-                    return;
-                }
-
-                sendMessage(await minigame([keyword, ...param], message.author.id))
                 break;
 
             case "!주사위":
