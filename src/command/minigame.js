@@ -229,6 +229,24 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                 .catch(() => "품질 수치 조회에 실패했습니다.")
         }
 
+        if(param[0] === "랭킹") {
+            return pgClient
+                .query(minigameDao.selectAll)
+                .then((res) => {
+                    res.sort((a, b) => {
+                        if (a.quality > b.quality) return 1;
+                        if (a.quality < b.quality) return -1;
+
+                        return 0;
+                    })
+
+                    return res.map(data => {
+                        return `${data.quality} - ${data.user_name}`
+                    }).join("\n");
+                })
+                .catch(() => `랭킹 조회에 실패했습니다.`)
+        }
+
         const res = await pgClient.query(minigameDao.select, [discordId]);
         const data = res[0];
 
