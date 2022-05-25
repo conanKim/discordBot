@@ -2,6 +2,7 @@ const INIT = `CREATE TABLE IF NOT EXISTS minigames (
     discord_id varchar(50) NOT NULL,
     refine_level integer NOT NULL DEFAULT 0,
     try_count integer NOT NULL DEFAULT 0,
+    quality integer NOT NULL DEFAULT 0,
     last_execute_time varchar(50) DEFAULT '0'
 );
 
@@ -14,7 +15,7 @@ SET quality = 0
 WHERE quality = null
 `
 
-const JOIN = `INSERT INTO minigames (discord_id, refine_level, try_count, last_execute_time) VALUES ($1, 0, 0, '0');`
+const JOIN = `INSERT INTO minigames (discord_id, refine_level, try_count, quality, last_execute_time) VALUES ($1, 0, 0, 0, '0');`
 
 const SELECT = `SELECT * FROM minigames WHERE discord_id = $1`
 const SELECT_ALL = `SELECT * FROM minigames mg, users u WHERE mg.discord_id = u.discord_id`
