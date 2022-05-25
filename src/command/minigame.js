@@ -161,9 +161,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                         message += `[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.\n` 
                     }
                     
-                    if(refine.refine_level + 1 > 28) {
-                        noticeCallback(`[${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.`);
-                    }
+                    noticeCallback(`장기백으로 [${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.`);
                     return message;
                 })
                 .catch(() => {})
