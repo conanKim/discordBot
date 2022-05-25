@@ -75,7 +75,7 @@ client.on("messageCreate", async (message) => {
             return;
         }
 
-        if (keyword === "!재련") {
+        if (keyword === "!재련" || keyword === "!품질") {
             if(!gameChannelId.includes(message.channelId)) {
                 return;
             }

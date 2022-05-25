@@ -37,6 +37,29 @@ const refineData = [
     [0.005, 0.0005, 0.01, 0.0023, 0.025], //+24
 ]
 
+const qualityData = [
+    0.86,
+    1.89,
+    3.27,
+    6.17,
+    12.85,
+    23.3,
+    37.53,
+    55.54,
+    77.1,
+    100
+]
+
+const getQuality = () => {
+    let rnd = Math.random() * 100;
+    const qualityBase = (10 - qualityData.findIndex((q) => rnd < q)) * 10;
+
+    const range = qualityBase === 100 ? 11 : 10;
+    const rnd2 = Math.floor(rnd * range) % range;
+
+    return qualityBase - rnd2;
+}
+
 const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => {
     if(keyword === "!재련") {
         if(param[0] === "도움말") {
@@ -117,7 +140,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
         const refine = res[0];
         const elapsedTime = new Date().getTime() - refine.last_execute_time;
         if(elapsedTime < 1000 * 60) {
-            return `마지막 재련 시도 이후 1분이 지나지 않았습니다. 남은시간 : ${60 - Math.round(elapsedTime/1000)} 초`
+            return `마지막 시도 이후 1분이 지나지 않았습니다. 남은시간 : ${60 - Math.round(elapsedTime/1000)} 초`
         }
 
         const [baseRate, bonusRate, maxRate, energy, destroyRate] = refineData[refine.refine_level];
@@ -182,6 +205,68 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                 .query(minigameDao.refineFailed, [discordId, new Date().getTime()])
                 .then(() => `${Math.round(refineRate * 10000) / 100}% 의 확률을 뚫지 못하고 [${itemColor}] ${refineLevel + 1}강 강화에 실패했습니다.\n(현재 장인의 기운 ${Math.round(nextEnergy * 10000) / 100}%)`)
                 .catch(() => {})
+        }
+    }
+    if(keyword === "!품질") {
+        if(param[0] === "도움말") {
+            let emptyMsg = "";
+            emptyMsg += `사용법\n`;
+            emptyMsg += `!품질\n`;
+            emptyMsg += `!품질 조회\n`;
+            emptyMsg += `!품질 랭킹\n`;
+        
+            return emptyMsg;
+        }
+
+        if(param[0] === "조회") {
+            return pgClient
+                .query(minigameDao.select, [discordId])
+                .then((res) => {
+                    const data = res[0];
+
+                    return `현재 품질은 ${data.quality} 입니다.`
+                })
+                .catch(() => "품질 수치 조회에 실패했습니다.")
+        }
+
+        const res = await pgClient.query(minigameDao.select, [discordId]);
+        const data = res[0];
+
+        const elapsedTime = new Date().getTime() - data.last_execute_time;
+        if(elapsedTime < 1000 * 60) {
+            return `마지막 시도 이후 1분이 지나지 않았습니다. 남은시간 : ${60 - Math.round(elapsedTime/1000)} 초`
+        }
+
+        if(param[0] === "제작") {
+
+            const newQuality = getQuality();
+    
+            return pgClient
+                .query(minigameDao.qualityUpdate, [newQuality, discordId, new Date().getTime()])
+                .then(() => `신규 장비를 제작했습니다. (초기 품질 : ${newQuality})`)
+                .catch(() => `품질작에 오류가 발생했습니다.`)
+        }
+
+        const newQuality = getQuality();
+        
+        const successRate = (() => {
+            if(data.quality === 100) return 0;
+            if(data.quality >= 90) return (10 - data.quality % 10) * (qualityData[0] / 11);
+
+            const qualityIdx = 9 - Math.floor(data.quality / 10);
+            return qualityData[qualityIdx - 1] + (qualityData[qualityIdx] - qualityData[qualityIdx - 1]) / 10 * (9 - data.quality % 10);
+        })();
+
+        if(data.quality < newQuality) {
+            return pgClient
+                .query(minigameDao.qualityUpdate, [newQuality, discordId, new Date().getTime()])
+                .then(() => `${Math.round(successRate * 100)/100}% 확률을 뚫고 품질작에 성공했습니다. (${data.quality} => ${newQuality})`)
+                .catch(() => `품질작에 오류가 발생했습니다.`)
+        } else {
+            return pgClient
+                .query(minigameDao.qualityUpdate, [data.quality, discordId, new Date().getTime()])
+                .then(() => `${Math.round(successRate * 100)/100}% 확률을 뚫지 못하고 품질작에 실패했습니다. (현재 품질 : ${data.quality})`)
+                .catch(() => `품질작에 오류가 발생했습니다.`)
         }
     }
 }
