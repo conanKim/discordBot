@@ -114,6 +114,9 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
 
                         if (a.try_count > b.try_count) return 1;
                         if (a.try_count < b.try_count) return -1;
+                        
+                        if (a.quality > b.quality) return 1;
+                        if (a.quality < b.quality) return -1;
 
                         return 0;
                     })
@@ -235,6 +238,12 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                         if (a.quality > b.quality) return 1;
                         if (a.quality < b.quality) return -1;
 
+                        if (a.refine_level > b.refine_level) return 1;
+                        if (a.refine_level < b.refine_level) return -1;
+
+                        if (a.try_count > b.try_count) return 1;
+                        if (a.try_count < b.try_count) return -1;
+                        
                         return 0;
                     })
 
