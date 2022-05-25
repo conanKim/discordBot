@@ -278,12 +278,22 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
         if(data.quality < newQuality) {
             return pgClient
                 .query(minigameDao.qualityUpdate, [newQuality, discordId, new Date().getTime()])
-                .then(() => `${Math.round(successRate * 100)/100}% 확률을 뚫고 품질작에 성공했습니다. (${data.quality} => ${newQuality})`)
+                .then(() => {
+                    if(newQuality >= 90) {
+                        noticeCallback(`${newQuality} 품질작에 성공하셨습니다.`);
+                    }
+                    return `${Math.round(successRate * 100)/100}% 확률을 뚫고 품질작에 성공했습니다. (${data.quality} => ${newQuality})`
+                })
                 .catch(() => `품질작에 오류가 발생했습니다.`)
         } else {
             return pgClient
                 .query(minigameDao.qualityUpdate, [data.quality, discordId, new Date().getTime()])
-                .then(() => `${Math.round(successRate * 100)/100}% 확률을 뚫지 못하고 품질작에 실패했습니다. (현재 품질 : ${data.quality})`)
+                .then(() => {
+                    if(data.quality <= 10) {
+                        noticeCallback(`${data.quality} 에서 품질작에 실패하셨습니다.`);
+                    }
+                    return `${Math.round(successRate * 100)/100}% 확률을 뚫지 못하고 품질작에 실패했습니다. (현재 품질 : ${data.quality})`
+                })
                 .catch(() => `품질작에 오류가 발생했습니다.`)
         }
     }
