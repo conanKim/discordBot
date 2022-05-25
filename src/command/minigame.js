@@ -85,14 +85,24 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                 .query(minigameDao.select, [discordId])
                 .then((res) => {
                     const refine = res[0];
+                    const [baseRate, bonusRate, maxRate, energy, destroyRate] = refineData[refine.refine_level];
+                    const refineRate = Math.min(baseRate + bonusRate * refine.try_count, maxRate);
+
                     const itemColor = refine.refine_level < 20 ? "유물" : "고대";
                     const refineLevel = refine.refine_level < 20 ? refine.refine_level : refine.refine_level - 8;
 
                     if(refine.refine_level === 33) {
                         return `현재 [${itemColor}] ${refineLevel}강 입니다.`
                     }
+
+                    const message = `현재 [${itemColor}] ${refineLevel}강, 장인의 기운 ${Math.round(Math.min(refine.try_count * refineData[refine.refine_level][3], 1) * 10000) / 100}% 입니다.\n`
                     
-                    return `현재 [${itemColor}] ${refineLevel}강, 장인의 기운 ${Math.round(Math.min(refine.try_count * refineData[refine.refine_level][3], 1) * 10000) / 100}% 입니다.`
+                    message += `재련 시도 시 성공할 확률 : ${Math.round(refineRate * 10000) / 100}%\n`
+                    if(destroyRate) {
+                        message += `재련 시도 시 파괴될 확률 : ${Math.round(destroyRate * 10000) / 100}%\n`
+                    }
+                    message += `재련 실패 시 추가 장인의 기운 수치 : ${Math.round(energy * 10000) / 100}%\n`
+                    return message;
                 })
                 .catch(() => "재련 수치 조회에 실패했습니다.")
         }
@@ -219,13 +229,21 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
             return emptyMsg;
         }
 
+        const successRate = ((quality) => {
+            if(quality === 100) return 0;
+            if(quality >= 90) return (10 - quality % 10) * (qualityData[0] / 11);
+
+            const qualityIdx = 9 - Math.floor(quality / 10);
+            return qualityData[qualityIdx - 1] + (qualityData[qualityIdx] - qualityData[qualityIdx - 1]) / 10 * (9 - quality % 10);
+        });
+
         if(param[0] === "조회") {
             return pgClient
                 .query(minigameDao.select, [discordId])
                 .then((res) => {
                     const data = res[0];
 
-                    return `현재 품질은 ${data.quality} 입니다.`
+                    return `현재 품질은 ${data.quality} 입니다.\n품질작 시도 시 성공 확률은 ${Math.round(successRate(data.quality) * 100)/100}% 입니다.`
                 })
                 .catch(() => "품질 수치 조회에 실패했습니다.")
         }
@@ -243,7 +261,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
 
                         if (a.try_count > b.try_count) return 1;
                         if (a.try_count < b.try_count) return -1;
-                        
+
                         return 0;
                     })
 
@@ -278,14 +296,6 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
         }
 
         const newQuality = getQuality();
-        
-        const successRate = (() => {
-            if(data.quality === 100) return 0;
-            if(data.quality >= 90) return (10 - data.quality % 10) * (qualityData[0] / 11);
-
-            const qualityIdx = 9 - Math.floor(data.quality / 10);
-            return qualityData[qualityIdx - 1] + (qualityData[qualityIdx] - qualityData[qualityIdx - 1]) / 10 * (9 - data.quality % 10);
-        })();
 
         if(data.quality < newQuality) {
             return pgClient
@@ -294,7 +304,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                     if(newQuality >= 90) {
                         noticeCallback(`${newQuality} 품질작에 성공하셨습니다.`);
                     }
-                    return `${Math.round(successRate * 100)/100}% 확률을 뚫고 품질작에 성공했습니다. (${data.quality} => ${newQuality})`
+                    return `${Math.round(successRate(data.quality) * 100)/100}% 확률을 뚫고 품질작에 성공했습니다. (${data.quality} => ${newQuality})`
                 })
                 .catch(() => `품질작에 오류가 발생했습니다.`)
         } else {
@@ -304,7 +314,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                     if(data.quality <= 10) {
                         noticeCallback(`${data.quality} 에서 품질작에 실패하셨습니다.`);
                     }
-                    return `${Math.round(successRate * 100)/100}% 확률을 뚫지 못하고 품질작에 실패했습니다. (현재 품질 : ${data.quality})`
+                    return `${Math.round(successRate(data.quality) * 100)/100}% 확률을 뚫지 못하고 품질작에 실패했습니다. (현재 품질 : ${data.quality})`
                 })
                 .catch(() => `품질작에 오류가 발생했습니다.`)
         }
