@@ -135,7 +135,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                         const itemColor = refine.refine_level < 20 ? "유물" : "고대";
                         const refineLevel = refine.refine_level < 20 ? refine.refine_level : refine.refine_level - 8;
 
-                        return `[${itemColor}] ${refineLevel}강 (장기 ${Math.round(Math.min(refine.try_count * refineData[refine.refine_level][3], 1) * 10000) / 100}%) - ${refine.user_name}`
+                        return `[${refine.quality}] [${itemColor}] ${refineLevel}강 (장기 ${Math.round(Math.min(refine.try_count * refineData[refine.refine_level][3], 1) * 10000) / 100}%) - ${refine.user_name}`
                     }).join("\n");
                 })
                 .catch(() => `랭킹 조회에 실패했습니다.`)
@@ -266,7 +266,10 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                     })
 
                     return res.map(data => {
-                        return `${data.quality} - ${data.user_name}`
+                        const itemColor = data.refine_level < 20 ? "유물" : "고대";
+                        const refineLevel = data.refine_level < 20 ? data.refine_level : data.refine_level - 8;
+
+                        return `[${data.quality}] [${itemColor}] ${refineLevel}강 (장기 ${Math.round(Math.min(data.try_count * refineData[data.refine_level][3], 1) * 10000) / 100}%) - ${data.user_name}`
                     }).join("\n");
                 })
                 .catch(() => `랭킹 조회에 실패했습니다.`)
