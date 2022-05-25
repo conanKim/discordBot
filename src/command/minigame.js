@@ -261,7 +261,12 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
     
             return pgClient
                 .query(minigameDao.qualityUpdate, [newQuality, discordId, new Date().getTime()])
-                .then(() => `신규 장비를 제작했습니다. (초기 품질 : ${newQuality})`)
+                .then(() => {
+                    if(data.quality <= 10 || data.quality >= 90) {
+                        noticeCallback(`${data.quality} 품질의 신규 장비를 제작하셨습니다.`);
+                    }
+                    return `신규 장비를 제작했습니다. (초기 품질 : ${newQuality})`
+                })
                 .catch(() => `품질작에 오류가 발생했습니다.`)
         }
 
