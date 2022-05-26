@@ -178,7 +178,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                         message += `[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.\n` 
                     }
                     
-                    return messa    ge;
+                    return message;
                 })
                 .catch(() => {})
         }
