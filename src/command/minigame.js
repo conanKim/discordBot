@@ -8,33 +8,33 @@ const refineData = [
     [1, 0, 1, 0, 0], //3
     [1, 0, 1, 0, 0], //4
     [1, 0, 1, 0, 0], //5
-    [0.8, 0.06, 1, 0.3721, 0], //6
-    [0.65, 0.045, 1, 0.3023, 0], //7
-    [0.5, 0.03, 1, 0.2326, 0], //8
-    [0.5, 0.03, 1, 0.2326, 0], //9
-    [0.5, 0.03, 1, 0.2326, 0], //10
-    [0.35, 0.015, 1, 0.1628, 0], //11
-    [0.35, 0.015, 1, 0.1628, 0], //12
-    [0.35, 0.015, 1, 0.1628, 0], //13
-    [0.3, 0.01, 1, 0.1395, 0], //14
-    [0.1, 0.01, 0.2, 0.0465, 0], //15
-    [0.1, 0.01, 0.2, 0.0465, 0], //16
-    [0.05, 0.005, 0.1, 0.0233, 0], //17
-    [0.05, 0.005, 0.1, 0.0233, 0], //18
-    [0.03, 0.003, 0.06, 0.014, 0], //19
-    [0.1, 0.01, 0.2, 0.0465, 0], //+12
-    [0.05, 0.005, 0.1, 0.0233, 0], //+13
-    [0.05, 0.005, 0.1, 0.0233, 0], //+14
-    [0.04, 0.004, 0.08, 0.0186, 0], //+15
-    [0.04, 0.004, 0.08, 0.0186, 0], //+16
-    [0.03, 0.003, 0.06, 0.014, 0], //+17
-    [0.03, 0.003, 0.06, 0.014, 0], //+18
-    [0.015, 0.0015, 0.03, 0.007, 0], //+19
-    [0.015, 0.0015, 0.03, 0.007, 0.005], //+20
-    [0.01, 0.001, 0.02, 0.0047, 0.01], //+21
-    [0.01, 0.001, 0.02, 0.0047, 0.015], //+22
-    [0.005, 0.0005, 0.01, 0.0023, 0.02], //+23
-    [0.005, 0.0005, 0.01, 0.0023, 0.025], //+24
+    [0.8, 0.06, 1, 0], //6
+    [0.65, 0.045, 1, 0], //7
+    [0.5, 0.03, 1, 0], //8
+    [0.5, 0.03, 1, 0], //9
+    [0.5, 0.03, 1, 0], //10
+    [0.35, 0.015, 1, 0], //11
+    [0.35, 0.015, 1, 0], //12
+    [0.35, 0.015, 1, 0], //13
+    [0.3, 0.01, 1, 0], //14
+    [0.1, 0.01, 0.2, 0], //15
+    [0.1, 0.01, 0.2, 0], //16
+    [0.05, 0.005, 0.1, 0], //17
+    [0.05, 0.005, 0.1, 0], //18
+    [0.03, 0.003, 0.06, 0], //19
+    [0.1, 0.01, 0.2, 0], //+12
+    [0.05, 0.005, 0.1, 0], //+13
+    [0.05, 0.005, 0.1, 0], //+14
+    [0.04, 0.004, 0.08, 0], //+15
+    [0.04, 0.004, 0.08, 0], //+16
+    [0.03, 0.003, 0.06, 0], //+17
+    [0.03, 0.003, 0.06, 0], //+18
+    [0.015, 0.0015, 0.03, 0], //+19
+    [0.015, 0.0015, 0.03, 0.005], //+20
+    [0.01, 0.001, 0.02, 0.01], //+21
+    [0.01, 0.001, 0.02, 0.015], //+22
+    [0.005, 0.0005, 0.01, 0.02], //+23
+    [0.005, 0.0005, 0.01, 0.025], //+24
 ]
 
 const qualityData = [
@@ -49,6 +49,8 @@ const qualityData = [
     77.1,
     100
 ]
+
+const LIMIT_TIME = 1;
 
 const getQuality = () => {
     let rnd = Math.random() * 100;
@@ -85,7 +87,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                 .query(minigameDao.select, [discordId])
                 .then((res) => {
                     const refine = res[0];
-                    const [baseRate, bonusRate, maxRate, energy, destroyRate] = refineData[refine.refine_level];
+                    const [baseRate, bonusRate, maxRate, destroyRate] = refineData[refine.refine_level];
                     const refineRate = Math.min(baseRate + bonusRate * refine.try_count, maxRate);
 
                     const itemColor = refine.refine_level < 20 ? "유물" : "고대";
@@ -101,7 +103,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                     if(destroyRate) {
                         message += `재련 시도 시 파괴될 확률 : ${Math.round(destroyRate * 10000) / 100}%\n`
                     }
-                    message += `재련 실패 시 추가 장인의 기운 수치 : ${Math.round(energy * 10000) / 100}%\n`
+                    message += `재련 실패 시 추가 장인의 기운 수치 : ${Math.round(refineRate / 2.15 * 10000) / 100}%\n`
                     return message;
                 })
                 .catch(() => "재련 수치 조회에 실패했습니다.")
@@ -152,11 +154,11 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
 
         const refine = res[0];
         const elapsedTime = new Date().getTime() - refine.last_execute_time;
-        if(elapsedTime < 1000 * 60) {
-            return `마지막 시도 이후 1분이 지나지 않았습니다. 남은시간 : ${60 - Math.round(elapsedTime/1000)} 초`
+        if(elapsedTime < 1000 * LIMIT_TIME) {
+            return `마지막 시도 이후 1분이 지나지 않았습니다. 남은시간 : ${LIMIT_TIME - Math.round(elapsedTime/1000)} 초`
         }
 
-        const [baseRate, bonusRate, maxRate, energy, destroyRate] = refineData[refine.refine_level];
+        const [baseRate, bonusRate, maxRate, destroyRate] = refineData[refine.refine_level];
 
         const itemColor = refine.refine_level < 20 ? "유물" : "고대";
         const refineLevel = refine.refine_level < 20 ? refine.refine_level : refine.refine_level - 8;
@@ -165,16 +167,17 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
             return `현재 [${itemColor}] ${refineLevel}강 입니다.`
         }
         
-        if(energy * refine.try_count > 1) {
+        if(parseFloat(refine.energy) === 100) {
             return pgClient
                 .query(minigameDao.refineSuccess, [discordId, new Date().getTime()])
                 .then(() => {
                     let message = `장기백으로 [${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.\n`
+                    noticeCallback(message);
+
                     if(refine.refine_level + 1 === 20) {
                         message += `[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.\n` 
                     }
                     
-                    noticeCallback(message);
                     return message;
                 })
                 .catch(() => {})
@@ -183,12 +186,10 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
         const refineRate = Math.min(baseRate + bonusRate * refine.try_count, maxRate);
         const dice = Math.random();
         if(dice < refineRate) {
-            const currentEnergy = energy * refine.try_count;
-
             return pgClient
                 .query(minigameDao.refineSuccess, [discordId, new Date().getTime()])
                 .then(() => {
-                    let message = `${Math.round(refineRate * 10000) / 100}% 의 확률을 뚫고 장인의 기운 ${Math.round(currentEnergy * 10000) / 100}% 에서 [${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.\n`
+                    let message = `${Math.round(refineRate * 10000) / 100}% 의 확률을 뚫고 장인의 기운 ${refine.energy}% 에서 [${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.\n`
                     if(refine.refine_level + 1 === 20) {
                         message += `[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.\n` 
                         noticeCallback(`[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.`);
@@ -211,11 +212,11 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                 })
                 .catch(() => `[${itemColor}] ${refineLevel}강에서 ${destroyRate * 100}% 확률을 뚫고 장비가 파괴될뻔 했지만 서버오류로 한번만 봐드립니다.`)
         } else {
-            const nextEnergy = Math.min(energy * (refine.try_count + 1), 1);
+            const nextEnergy = Math.round(Math.min(parseFloat(refine.energy) + refineRate * 100 / 2.15, 100) * 100) / 100;
 
             return pgClient
-                .query(minigameDao.refineFailed, [discordId, new Date().getTime()])
-                .then(() => `${Math.round(refineRate * 10000) / 100}% 의 확률을 뚫지 못하고 [${itemColor}] ${refineLevel + 1}강 강화에 실패했습니다.\n(현재 장인의 기운 ${Math.round(nextEnergy * 10000) / 100}%)`)
+                .query(minigameDao.refineFailed, [nextEnergy, discordId, new Date().getTime()])
+                .then(() => `${Math.round(refineRate * 10000) / 100}% 의 확률을 뚫지 못하고 [${itemColor}] ${refineLevel + 1}강 강화에 실패했습니다.\n(현재 장인의 기운 ${nextEnergy}%)`)
                 .catch(() => {})
         }
     }
@@ -280,8 +281,8 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
         const data = res[0];
 
         const elapsedTime = new Date().getTime() - data.last_execute_time;
-        if(elapsedTime < 1000 * 60) {
-            return `마지막 시도 이후 1분이 지나지 않았습니다. 남은시간 : ${60 - Math.round(elapsedTime/1000)} 초`
+        if(elapsedTime < 1000 * LIMIT_TIME) {
+            return `마지막 시도 이후 1분이 지나지 않았습니다. 남은시간 : ${LIMIT_TIME - Math.round(elapsedTime/1000)} 초`
         }
 
         if(param[0] === "제작") {
