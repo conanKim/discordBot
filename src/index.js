@@ -80,10 +80,10 @@ client.on("messageCreate", async (message) => {
                 return;
             }
 
-            const noticeCallback = async (message) => {
+            const noticeCallback = async (text) => {
                 const channel = client.channels.cache.get(generalChannelId);
 
-                await channel.send(`${message.author.username}님께서 ${message}`);
+                await channel.send(`[미니게임 공지]\n${message.author.username}님께서 ${text}`);
             }
 
             return sendMessage(await minigame([keyword, ...param], message.author.id, noticeCallback))
