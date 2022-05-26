@@ -50,7 +50,7 @@ const qualityData = [
     100
 ]
 
-const LIMIT_TIME = 1;
+const LIMIT_TIME = 60;
 
 const getQuality = () => {
     let rnd = Math.random() * 100;
@@ -178,7 +178,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                         message += `[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.\n` 
                     }
                     
-                    return message;
+                    return messa    ge;
                 })
                 .catch(() => {})
         }
