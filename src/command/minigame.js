@@ -174,7 +174,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                         message += `[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.\n` 
                     }
                     
-                    noticeCallback(`장기백으로 [${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.`);
+                    noticeCallback(message);
                     return message;
                 })
                 .catch(() => {})
@@ -191,6 +191,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                     let message = `${Math.round(refineRate * 10000) / 100}% 의 확률을 뚫고 장인의 기운 ${Math.round(currentEnergy * 10000) / 100}% 에서 [${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.\n`
                     if(refine.refine_level + 1 === 20) {
                         message += `[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.\n` 
+                        noticeCallback(`[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.`);
                     }
 
                     if(refine.refine_level + 1 > 28) {
