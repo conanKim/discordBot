@@ -26,7 +26,7 @@ const getMember = async ([keyword, ...param] = []) => {
     if (keyword === "조회") {
         return pgClient
             .query(userDao.list)
-            .then((res) => JSON.stringify(res))
+            .then((res) => res.map((user) => `[${user.prefix}] ${user.user_name}${user.discord_id ? " :white_check_mark:" : ""}`).join("\n"))
             .catch(() => "실패");
     }
     if (keyword === "삭제") {
