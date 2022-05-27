@@ -1,5 +1,14 @@
 // Require the necessary discord.js classes
-const { token, adminId, clientId, allowChannelId, allowKeyword, gameChannelId, generalChannelId } = require("../config.json");
+const { 
+    token, 
+    adminId, 
+    guildId, 
+    clientId, 
+    allowChannelId, 
+    allowKeyword, 
+    gameChannelId, 
+    generalChannelId 
+} = require("../config.json");
 const { Client, Intents } = require("discord.js");
 
 const { getUserLevel } = require("./command/level");
@@ -59,6 +68,7 @@ client.on("messageCreate", async (message) => {
     try {
         console.log(message);
         if (message.author.id === clientId) return;
+        if (message.guildId !== guildId) return;
 
         const isCommand = (keyword = "") => {
             const prefix = "!";
