@@ -1,5 +1,6 @@
 const pgClient = require("../dao");
 const minigameDao = require("../dao/minigame");
+const userDao = require("../dao/user");
 
 const refineData = [
     [1, 0, 1, 0, 0], //0
@@ -117,6 +118,11 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
         }
 
         if(param[0] === "랭킹") {
+            const authenticated = await pgClient.query(userDao.selectByDiscordId, [discordId]);
+            if (authenticated.length === 0) {
+                return `연동되지 않은 유저입니다. '일해라네지트' 채널에서 '!멤버 인증 [멤버명]' 을 입력해주세요.\nex) !멤버 인증 네지트`
+            }
+
             return pgClient
                 .query(minigameDao.selectAll)
                 .then((res) => {
@@ -151,6 +157,10 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
         }
 
         const res = await pgClient.query(minigameDao.select, [discordId])
+
+        if(res.length === 0) {
+            return `재련 게임에 참가하지 않은 사용자입니다.\n'!재련 참가' 를 입력해주세요.`
+        }
 
         const refine = res[0];
         const elapsedTime = new Date().getTime() - refine.last_execute_time;
