@@ -77,6 +77,11 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
         }
 
         if(param[0] === "참가") {
+            const authenticated = await pgClient.query(userDao.selectByDiscordId, [discordId]);
+            if (authenticated.length === 0) {
+                return `연동되지 않은 유저입니다. '일해라네지트' 채널에서 '!멤버 인증 [멤버명]' 을 입력해주세요.\nex) !멤버 인증 네지트`
+            }
+            
             return pgClient
                 .query(minigameDao.join, [discordId])
                 .then((res) => `재련 게임에 참가했습니다.`)
