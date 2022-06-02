@@ -98,7 +98,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                         return `현재 [${itemColor}] ${refineLevel}강 입니다.`
                     }
 
-                    let message = `현재 [${itemColor}] ${refineLevel}강, 장인의 기운 ${Math.round(Math.min(refine.try_count * refineData[refine.refine_level][3], 1) * 10000) / 100}% 입니다.\n`
+                    let message = `현재 [${itemColor}] ${refineLevel}강, 장인의 기운 ${refine.energy}% 입니다.\n`
                     
                     message += `재련 시도 시 성공할 확률 : ${Math.round(refineRate * 10000) / 100}%\n`
                     if(destroyRate) {
