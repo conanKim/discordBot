@@ -51,6 +51,13 @@ const getMember = async ([keyword, ...param] = []) => {
             .catch(() => "멤버 인증에 실패했습니다.");
     }
 
+    if (keyword === "대리인증") {
+        return pgClient
+            .query(userDao.authenticate, [param[0], param[1]])
+            .then(() => "멤버 인증에 성공했습니다.")
+            .catch(() => "멤버 인증에 실패했습니다.");
+    }
+
     return emptyMsg;
 };
 
