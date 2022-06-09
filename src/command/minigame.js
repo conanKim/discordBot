@@ -99,6 +99,8 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                     const itemColor = refine.refine_level < 20 ? "유물" : "고대";
                     const refineLevel = refine.refine_level < 20 ? refine.refine_level : refine.refine_level - 8;
 
+                    const nextEnergy =  Math.round(Math.min(parseFloat(refine.energy) + refineRate * 100 / 2.15, 100) * 100) / 100;
+
                     if(refine.refine_level === 33) {
                         return `현재 [${itemColor}] ${refineLevel}강 입니다.`
                     }
@@ -109,7 +111,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                     if(destroyRate) {
                         message += `재련 시도 시 파괴될 확률 : ${Math.round(destroyRate * 10000) / 100}%\n`
                     }
-                    message += `재련 실패 시 추가 장인의 기운 수치 : ${Math.round(refineRate / 2.15 * 10000) / 100}%\n`
+                    message += `재련 실패 시 장인의 기운 : ${nextEnergy}% (+${Math.round(refineRate / 2.15 * 10000) / 100})%\n`
                     return message;
                 })
                 .catch(() => "재련 수치 조회에 실패했습니다.")
@@ -211,7 +213,7 @@ const minigame = async ([keyword, ...param] = [], discordId, noticeCallback) => 
                         noticeCallback(`[유물] 20강 장비를 [고대] 12강으로 계승하였습니다.`);
                     }
 
-                    if(refine.refine_level > 25) {
+                    if(refine.refine_level >= 25) {
                         noticeCallback(`[${itemColor}] ${refineLevel + 1}강 강화에 성공했습니다.`);
                     }
 
