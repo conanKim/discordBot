@@ -79,11 +79,6 @@ client.on("messageCreate", async (message) => {
         if (!isCommand()) return;
 
         const [keyword, ...param] = message.content.split(" ");
-        
-        if (`!${parseInt(keyword.substring(1))}` === keyword) {
-            sendMessage(calcDutchPay([parseInt(keyword.substring(1))]));
-            return;
-        }
 
         if (keyword === "!재련" || keyword === "!품질") {
             if(!gameChannelId.includes(message.channelId)) {
@@ -101,6 +96,11 @@ client.on("messageCreate", async (message) => {
 
         if (!allowChannelId.includes(message.channelId) && !allowKeyword.includes(keyword.substring(1))) return;
 
+        if (`!${parseInt(keyword.substring(1))}` === keyword) {
+            sendMessage(calcDutchPay([parseInt(keyword.substring(1))]));
+            return;
+        }
+        
         switch (keyword) {
             case "!ping":
                 sendMessage("pong!");
