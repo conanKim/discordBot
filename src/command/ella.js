@@ -88,14 +88,23 @@ const emojiId = {
 }
 
 const getEllaLanguage = (param) => {
-    const decompositedText = param.split("").reduce((prev, curr) => {
-        if(curr.charCodeAt(0) < 44032) return [...prev, curr];
+    const textArray = param.split("\n");
 
-        const constantVowel = getConstantVowel(curr);
-        return [...prev, ...decomposition(constantVowel.f), ...decomposition(constantVowel.s), ...decomposition(constantVowel.t)]
-    }, [])
+    console.log(textArray);
 
-    return decompositedText.filter(t => t !== null).map((t) => emojiId[t]).reverse().join("");
+    const convertedText = textArray.map(text => {
+        const decompositedText = text.split("").reduce((prev, curr) => {
+            if(curr.charCodeAt(0) < 44032) return [...prev, curr];
+    
+            const constantVowel = getConstantVowel(curr);
+            return [...prev, ...decomposition(constantVowel.f), ...decomposition(constantVowel.s), ...decomposition(constantVowel.t)]
+        }, [])
+    
+        return decompositedText.filter(t => t !== null).map((t) => emojiId[t]).reverse().join("");
+        }
+    )
+
+    return convertedText.join("\n");
 }
 
 
