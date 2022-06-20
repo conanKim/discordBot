@@ -125,6 +125,11 @@ client.on("messageCreate", async (message) => {
                 sendMessage(calcDutchPay(param));
                 break;
 
+            case "!엘라":
+            case "!엘라어":
+                sendMessage(getEllaLanguage(param.join("")))
+                break;
+
             case "!주사위":
                 const max = param[0] || 100;
                 const score = Math.ceil(Math.random() * max);
