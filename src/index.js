@@ -22,6 +22,7 @@ const { getRoster } = require("./command/roster");
 const { getCharacter } = require("./command/character");
 const { getParty } = require("./command/party");
 const { getReward } = require("./command/reward");
+const { getEllaLanguage } = require("./command/ella");
 
 const PG = require("./dao/index");
 const { adminCommand } = require("./command/admin");
