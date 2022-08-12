@@ -35,11 +35,11 @@ INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES
 const SELECT = `
 SELECT *
 FROM classes
-`
+`;
 
 const UPDATE = `
 ALTER TABLE classes ADD COLUMN IF NOT EXISTS emoji varchar(50);
-
+INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('기상술사', '기상', '스페셜리스트', '딜러', '<:class_aeromancer:1007556013504868413>') ON CONFLICT DO NOTHING
 
 UPDATE classes SET emoji='<:class_destroyer:934859881461215302>' WHERE class_name = '디스트로이어';
 UPDATE classes SET emoji='<:class_warlord:934859881045966920>' WHERE class_name = '워로드';
@@ -65,10 +65,10 @@ UPDATE classes SET emoji='<:class_holyknight:934859881494765658>' WHERE class_na
 UPDATE classes SET emoji='<:class_artist:934859881519923250>' WHERE class_name = '도화가';
 
 UPDATE classes SET class_nickname='블래' where class_name = '블래스터';
-`
+`;
 
 module.exports = {
     init: INIT,
     update: UPDATE,
-    list: SELECT
+    list: SELECT,
 };
