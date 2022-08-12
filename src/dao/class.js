@@ -63,7 +63,7 @@ UPDATE classes SET emoji='<:class_reaper:934859881452810311>' WHERE class_name =
 UPDATE classes SET emoji='<:class_bard:934859881134043197>' WHERE class_name = '바드';
 UPDATE classes SET emoji='<:class_holyknight:934859881494765658>' WHERE class_name = '홀리나이트';
 UPDATE classes SET emoji='<:class_artist:934859881519923250>' WHERE class_name = '도화가';
-UPDATE classes SET emoji='<:class_aeromancer:1007555815873454080>' WHERE class_name = '도화가';
+UPDATE classes SET emoji='<:class_aeromancer:1007555815873454080>' WHERE class_name = '기상술사';
 
 UPDATE classes SET class_nickname='블래' where class_name = '블래스터';
 `;
