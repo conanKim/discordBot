@@ -39,7 +39,7 @@ FROM classes
 
 const UPDATE = `
 ALTER TABLE classes ADD COLUMN IF NOT EXISTS emoji varchar(50);
-INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('기상술사', '기상', '스페셜리스트', '딜러', '<:class_aeromancer:1007555815873454080>') ON CONFLICT DO NOTHING;
+INSERT INTO classes (class_name, class_nickname, root_class, type, emoji) VALUES ('기상술사', '기상', '스페셜리스트', '딜러', '<:class_aeromancer:1007562212136726621>') ON CONFLICT DO NOTHING;
 
 UPDATE classes SET emoji='<:class_destroyer:934859881461215302>' WHERE class_name = '디스트로이어';
 UPDATE classes SET emoji='<:class_warlord:934859881045966920>' WHERE class_name = '워로드';
@@ -63,7 +63,7 @@ UPDATE classes SET emoji='<:class_reaper:934859881452810311>' WHERE class_name =
 UPDATE classes SET emoji='<:class_bard:934859881134043197>' WHERE class_name = '바드';
 UPDATE classes SET emoji='<:class_holyknight:934859881494765658>' WHERE class_name = '홀리나이트';
 UPDATE classes SET emoji='<:class_artist:934859881519923250>' WHERE class_name = '도화가';
-UPDATE classes SET emoji='<:class_aeromancer:1007555815873454080>' WHERE class_name = '기상술사';
+UPDATE classes SET emoji='<:class_aeromancer:1007562212136726621>' WHERE class_name = '기상술사';
 
 UPDATE classes SET class_nickname='블래' where class_name = '블래스터';
 `;
