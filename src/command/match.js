@@ -3,10 +3,11 @@ const entryDao = require("../dao/entry");
 
 const { putLvupGG } = require("../utils/utils");
 
-const create = async ([leagueName, token]) => {
+const create = async ([leagueName, bracketId, token]) => {
     return pgClient
-        .query(entryDao.select, param)
+        .query(entryDao.select, [leagueName])
         .then((res) => {
+            const rosters = res.map((entry, idx) => ({id: 'Hjk7eZbCaIzuHcj23456'+idx, name: entry.user_name}));
             const body = {
                "easyBracketId": "665aa0d65b276900074cb1dd",
                "organizeUserId": "665aa0bbbde5e230c677139d",
@@ -18,7 +19,7 @@ const create = async ([leagueName, token]) => {
                "useOverlay": false,
                "overlaySetting": {
                  "version": "4",
-                 "rosters": res.map(entry => ({id: entry.uma_uid, name: entry.user_name})),
+                 "rosters": rosters,
                  "matchResults": [],
                  "bracketType": "round-robin",
                  "sortWeights": [],
@@ -39,7 +40,7 @@ const create = async ([leagueName, token]) => {
                  "id": "TVGX97An1epO4Jokt_9wP"
                }
             }
-            return putLvupGG(body, token)
+            return putLvupGG(bracketId, body, token.replace(/(\r\n|\n|\r)/gm, "")).then(() => "대진표 생성 성공")
         })
         .catch(() => "실패");
 }
@@ -47,7 +48,7 @@ const create = async ([leagueName, token]) => {
 const matchCommand = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
-    emptyMsg += `!대진표 생성 {리그명} {lvup.gg 토큰}\n`;
+    emptyMsg += `!대진표 생성 {리그명} {lvup.gg URL} {lvup.gg 토큰}\n`;
 
     if (!keyword) {
         return emptyMsg;
