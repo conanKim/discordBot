@@ -12,9 +12,6 @@ const connect = async () => {
 };
 
 const schema = async () => {
-    await client.query(admin.init, (err, res) => {
-        console.log(err, res);
-    });
     await client.query(user.init, (err, res) => {
         console.log(err, res);
     });
