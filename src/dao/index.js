@@ -6,6 +6,7 @@ const league = require("./league");
 const user = require("./user");
 const group = require("./group");
 const match = require("./match");
+const entry = require("./entry");
 
 const connect = async () => {
     client = new Client(database);
@@ -26,6 +27,9 @@ const schema = async () => {
     });
     await client.query(match.init, (err, res) => {
         console.log(match.init, err, res);
+    });
+    await client.query(entry.init, (err, res) => {
+        console.log(entry.init, err, res);
     });
 
     console.log("SCHEMA DONE");
