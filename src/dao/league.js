@@ -7,6 +7,9 @@ const INIT = `CREATE TABLE IF NOT EXISTS league (
     PRIMARY KEY (league_id)
 );`;
 
+const CREATE = `INSERT INTO league (league_name, league_date, join_date_limit, user_count_limit) VALUES ($1, $2, $3, $4);`;
+
 module.exports = {
     init: INIT,
+    create: CREATE,
 };
