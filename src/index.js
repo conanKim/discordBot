@@ -79,6 +79,14 @@ client.on("messageCreate", async (message) => {
             case "!ping":
                 sendMessage("pong!");
                 break;
+
+            case "!관리자":
+                if (message.author.id !== adminId) return sendMessage("권한이 없습니다.");
+
+                const resultMsg = await adminCommand(param);
+                sendMessage(resultMsg);
+                break;
+
             default:
                 sendMessage("존재하지 않는 명령어 입니다.");
         }
