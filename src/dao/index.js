@@ -3,6 +3,7 @@ const { database } = require("../../config.json");
 let client;
 
 const user = require("./user");
+const league = require("./league");
 
 const connect = async () => {
     client = new Client(database);
@@ -13,7 +14,10 @@ const connect = async () => {
 
 const schema = async () => {
     await client.query(user.init, (err, res) => {
-        console.log(err, res);
+        console.log(user.init, err, res);
+    });
+    await client.query(league.init, (err, res) => {
+        console.log(league.init, err, res);
     });
 
     console.log("SCHEMA DONE");
