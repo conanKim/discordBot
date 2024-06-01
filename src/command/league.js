@@ -1,5 +1,6 @@
 const pgClient = require("../dao");
 const leagueDao = require("../dao/league");
+const entryDao = require("../dao/entry");
 
 const create = async (param) => {
     return pgClient
@@ -13,6 +14,13 @@ const select = async (param) => {
         .query(leagueDao.select)
         .then((res) => res.map((league) => `${league.league_id} ${league.league_name} ${league.league_date} ${league.join_date_limit} ${league.user_count_limit}`).join("\n"))
         .catch(() => "실패");
+}
+
+const join = async (param) => {
+    return pgClient
+        .query(entryDao.create, param)
+        .then(() => "리그 참가에 성공했습니다.")
+        .catch(() => "리그 참가에 실패했습니다.");
 }
 
 const leagueCommand = async ([keyword, ...param] = []) => {
@@ -29,6 +37,9 @@ const leagueCommand = async ([keyword, ...param] = []) => {
     }
     if (keyword === "생성") {
         return create(param)
+    }
+    if (keyword === "참가") {
+        return join(param)
     }
 
     return "잘못된 명령어 입니다.";

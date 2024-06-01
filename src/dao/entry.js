@@ -5,6 +5,11 @@ const INIT = `CREATE TABLE IF NOT EXISTS entries (
     FOREIGN KEY (uma_uid) REFERENCES users (uma_uid)
 );`;
 
+const SELECT = `SELECT * FROM entries;`
+const CREATE = `INSERT INTO entries (league_id, uma_uid) VALUES ($1, $2);`;
+
 module.exports = {
     init: INIT,
+    select: SELECT,
+    create: CREATE,
 };
