@@ -2,6 +2,8 @@ const { Client } = require("pg");
 const { database } = require("../../config.json");
 let client;
 
+const user = require("./user");
+
 const connect = async () => {
     client = new Client(database);
     await client.connect();
@@ -11,6 +13,9 @@ const connect = async () => {
 
 const schema = async () => {
     await client.query(admin.init, (err, res) => {
+        console.log(err, res);
+    });
+    await client.query(user.init, (err, res) => {
         console.log(err, res);
     });
 
