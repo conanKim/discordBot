@@ -15,6 +15,7 @@ const { Client, Intents } = require("discord.js");
 const PG = require("./dao/index");
 const { adminCommand } = require("./command/admin");
 const { leagueCommand } = require("./command/league");
+const { userCommand } = require("./command/user");
 
 // Create a new client instance
 const client = new Client({
@@ -83,6 +84,10 @@ client.on("messageCreate", async (message) => {
 
             case "!리그":
                 sendMessage(await leagueCommand(param))
+                break;
+
+            case "!유저":
+                sendMessage(await userCommand(param))
                 break;
 
             case "!관리자":
