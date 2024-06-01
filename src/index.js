@@ -11,22 +11,9 @@ const {
 } = require("../config.json");
 const { Client, Intents } = require("discord.js");
 
-const { getUserLevel } = require("./command/level");
-const { getGoldEmbed } = require("./command/gold");
-const { parseCultureCoupon } = require("./command/coupon");
-const { getHomework } = require("./command/homework");
-const { getBreath, setBreath } = require("./command/breath");
-const { calcDutchPay } = require("./command/dutchPay");
-const { getMember } = require("./command/member");
-const { getRoster } = require("./command/roster");
-const { getCharacter } = require("./command/character");
-const { getParty } = require("./command/party");
-const { getReward } = require("./command/reward");
-const { getEllaLanguage } = require("./command/ella");
 
 const PG = require("./dao/index");
 const { adminCommand } = require("./command/admin");
-const { minigame } = require("./command/minigame");
 
 // Create a new client instance
 const client = new Client({
