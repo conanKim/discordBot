@@ -23,6 +23,18 @@ const join = async (param) => {
         .catch(() => "리그 참가에 실패했습니다.");
 }
 
+const createMatch = async (param) => {
+    return pgClient
+        .query(entryDao.select, param)
+        .then((res) => {
+            const body = {
+                rosters: res.filter().map(entry => ({id: entry.uma_uid, name: entry.user_name}))
+            }
+            return JSON.stringify(body)
+        })
+        .catch(() => "실패");
+}
+
 const leagueCommand = async ([keyword, ...param] = []) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;

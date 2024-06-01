@@ -16,6 +16,7 @@ const PG = require("./dao/index");
 const { adminCommand } = require("./command/admin");
 const { leagueCommand } = require("./command/league");
 const { userCommand } = require("./command/user");
+const { matchCommand } = require("./command/match");
 
 // Create a new client instance
 const client = new Client({
@@ -88,6 +89,10 @@ client.on("messageCreate", async (message) => {
 
             case "!유저":
                 sendMessage(await userCommand(param))
+                break;
+
+            case "!대진표":
+                sendMessage(await matchCommand(param))
                 break;
 
             case "!관리자":
