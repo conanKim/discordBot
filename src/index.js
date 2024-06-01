@@ -14,6 +14,7 @@ const { Client, Intents } = require("discord.js");
 
 const PG = require("./dao/index");
 const { adminCommand } = require("./command/admin");
+const { leagueCommand } = require("./command/league");
 
 // Create a new client instance
 const client = new Client({
@@ -78,6 +79,10 @@ client.on("messageCreate", async (message) => {
         switch (keyword) {
             case "!ping":
                 sendMessage("pong!");
+                break;
+
+            case "!리그":
+                sendMessage(await leagueCommand(param))
                 break;
 
             case "!관리자":
