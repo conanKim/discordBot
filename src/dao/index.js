@@ -2,16 +2,6 @@ const { Client } = require("pg");
 const { database } = require("../../config.json");
 let client;
 
-const user = require("./user");
-const raid = require("./raid");
-const classes = require("./class");
-const character = require("./character");
-const party = require("./party");
-const partymember = require("./partymember");
-const reward = require("./reward");
-const rewardorders = require("./rewardorder");
-const minigames = require("./minigame");
-
 const connect = async () => {
     client = new Client(database);
     await client.connect();
@@ -20,49 +10,9 @@ const connect = async () => {
 };
 
 const schema = async () => {
-    await client.query(user.init, (err, res) => {
+    await client.query(admin.init, (err, res) => {
         console.log(err, res);
     });
-
-    await client.query(raid.init, (err, res) => {
-        console.log(err, res);
-    });
-
-    await client.query(classes.init, (err, res) => {
-        console.log(err, res);
-    });
-
-    await client.query(character.init, (err, res) => {
-        console.log(err, res);
-    });
-
-    await client.query(party.init, (err, res) => {
-        console.log(err, res);
-    });
-
-    await client.query(partymember.init, (err, res) => {
-        console.log(err, res);
-    });
-
-    await client.query(reward.init, (err, res) => {
-        console.log(err, res);
-    });
-
-    await client.query(rewardorders.init, (err, res) => {
-        console.log(err, res);
-    });
-
-    await client.query(minigames.init, (err, res) => {
-        console.log(err, res);
-    });
-
-    await client.query(classes.update, (err, res) => {
-        console.log(err, res);
-    })
-
-    await client.query(raid.updateTable, (err, res) => {
-        console.log(err, res);
-    })
 
     console.log("SCHEMA DONE");
 };

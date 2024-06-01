@@ -81,20 +81,6 @@ client.on("messageCreate", async (message) => {
 
         const [keyword, ...param] = message.content.split(" ");
 
-        if (keyword === "!재련" || keyword === "!품질") {
-            if(!gameChannelId.includes(message.channelId)) {
-                return;
-            }
-
-            const noticeCallback = async (text) => {
-                const channel = client.channels.cache.get(generalChannelId);
-
-                await channel.send(`**[미니게임 공지]**\n${message.author.username}님께서 ${text}`);
-            }
-
-            return sendMessage(await minigame([keyword, ...param], message.author.id, noticeCallback))
-        }
-
         if (!allowChannelId.includes(message.channelId) && !allowKeyword.includes(keyword.substring(1))) return;
 
         if (`!${parseInt(keyword.substring(1))}` === keyword) {
@@ -106,97 +92,6 @@ client.on("messageCreate", async (message) => {
             case "!ping":
                 sendMessage("pong!");
                 break;
-
-            case "!help":
-            case "!command":
-            case "!명령어":
-                let command = "!주사위 [범위]\n";
-                command += "!쌀 [금액]\n";
-                command += "!레벨 [이름]\n";
-                command += "!골드\n";
-                command += "!숙제\n";
-                sendMessage(command);
-                break;
-
-            case "!쌀":
-            case "!n":
-            case "!N":
-            case "!ㅜ":
-                sendMessage(calcDutchPay(param));
-                break;
-
-            case "!엘라":
-            case "!엘라어":
-                sendMessage(getEllaLanguage(param.join("")))
-                break;
-
-            case "!주사위":
-                const max = param[0] || 100;
-                const score = Math.ceil(Math.random() * max);
-                sendMessage(`주사위 ${max}\n결과 : ${score}`);
-                break;
-                
-            case "!확률":
-                const rate = Math.floor(Math.random() * 101);
-                sendMessage(`${param.join(" ")} 확률 : ${rate}%`);
-                break;
-
-            case "!선택장애":
-                sendMessage(`${param[Math.floor(Math.random() * param.length)]}`);
-                break;
-
-            case "!멤버":
-                sendMessage(await getMember([...param, message.author.id]));
-                break;
-
-            case "!원정대":
-                sendMessage(await getRoster(param));
-                break;
-
-            case "!캐릭터":
-                sendMessage(await getCharacter(param));
-                break;
-
-            case "!파티":
-                sendMessage(await getParty(param));
-                break;
-
-            case "!품앗이":
-                sendMessage(await getReward(param));
-                break;
-
-            case "!레벨":
-                const msg = await getUserLevel(param[0]);
-                sendMessage(msg);
-                break;
-
-            case "!골드":
-                sendMessage(getGoldEmbed());
-                break;
-
-            case "!풀숨":
-                sendMessage(getBreath(param));
-                break;
-
-            case "!풀숨설정":
-                sendMessage(setBreath(param));
-                break;
-
-            case "!숙제":
-                sendMessage(getHomework());
-                break;
-
-            case "!문상":
-                sendMessage(parseCultureCoupon(param));
-                break;
-
-            case "!관리자":
-                if (message.author.id !== adminId) return sendMessage("권한이 없습니다.");
-
-                const resultMsg = await adminCommand(param);
-                sendMessage(resultMsg);
-                break;
-
             default:
                 sendMessage("존재하지 않는 명령어 입니다.");
         }
