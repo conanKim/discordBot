@@ -8,8 +8,10 @@ const create = async ([leagueName, groupName, bracketId, token]) => {
     return pgClient
         .query(entryDao.select, [leagueName])
         .then((res) => {
-            const matches = res.map(row => ({...row, seed: Math.random()}))
-            matches.sort((a, b) => a.random - b.random)
+            const matches = res
+                .map(row => ({...row, seed: Math.random()}))
+                .sort((a, b) => a.random - b.random)
+
             console.log(matches)
 
             if (matches.length % 3 !== 0) matches.push({...matches[0], uma_uid: 'dummy0000001', user_name: '더미' })
@@ -95,10 +97,12 @@ const getMatches = async (param) => {
     return pgClient
         .query(matchDao.selectByLeague, param)
         .then((res) => {
-            const matches = res.reduce((curr, prev) => {
-                prev[curr.group_name] ? prev[curr.group_name] = [...prev[curr.group_name], curr.user_name] : [curr.user_name];
+            const matches = res.reduce((prev, curr) => {
+                console.log(curr, prev)
+                prev[curr.group_name] = prev[curr.group_name] ? [...prev[curr.group_name], curr.user_name] : [curr.user_name];
+                return prev;
             }, {})
-            return Object.keys(matches).map(key => `${key} - ${matches[key].join(", ")}`)
+            return Object.keys(matches).map(key => `${key} - ${matches[key].join(", ")}`).join("\n")
         })
         .catch(() => "실패");
 }
