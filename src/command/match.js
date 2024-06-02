@@ -64,15 +64,18 @@ const create = async ([leagueName, groupName, bracketId, token]) => {
             await pgClient.query(groupDao.reset, [leagueName])
             console.log("GROUP RESET 완료")
 
-            for (let i = 1; i <= res.length % 3; i++) {
-                await pgClient.query(groupDao.create, [`${groupName} - ${i}`])
+            for (let i = 0; i < res.length % 3; i++) {
+                await pgClient.query(groupDao.create, [`${groupName} - ${i + 1}`])
             }
             console.log("GROUP CREATE 완료")
 
-            for (let i = 0; i <= res.length / 3; i++) {
+            for (let i = 0; i < res.length / 3; i++) {
+                const groupData = await pgClient.query(groupDao.selectByLeague, [leagueName, `${groupName} - ${i + 1}`]);
+                const { league_id, group_id } = groupData[0];
+
                 for (let j = 0; j <= 3; j++) {
                     const row = res[i*3 + j]
-                    await pgClient.query(matchDao.create, [row.league_id, `${groupName} - ${i}`, row.uma_uid])
+                    await pgClient.query(matchDao.create, [row.league_id, `${groupName} - ${i + 1}`, row.uma_uid])
                 }
             }
             console.log("MATCH CREATE 완료")

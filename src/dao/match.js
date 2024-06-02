@@ -8,7 +8,7 @@ const INIT = `CREATE TABLE IF NOT EXISTS matches (
     FOREIGN KEY (uma_uid) REFERENCES users (uma_uid)
 );`;
 
-const CREATE = `INSERT INTO entries (league_id, group_id, uma_uid) VALUES ($1, $2, $3, false);`;
+const CREATE = `INSERT INTO matches (league_id, group_id, uma_uid) VALUES ($1, $2, $3, false);`;
 
 const RESET = `
 DELETE FROM entries
