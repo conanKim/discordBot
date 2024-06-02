@@ -35,6 +35,17 @@ const schema = async () => {
     console.log("SCHEMA DONE");
 };
 
+const test = async () => {
+    await client.query(league.test, (err, res) => {
+        console.log(league.init, err, res);
+    });
+    await client.query(user.test, (err, res) => {
+        console.log(user.init, err, res);
+    });
+
+    console.log("TEST DATA DONE");
+};
+
 const query = (query, params) => {
     console.log(`QUERY : ${query}`)
     return new Promise((resolve, reject) => {
@@ -58,4 +69,5 @@ module.exports = {
     query: query,
     connect: connect,
     schema: schema,
+    test: test,
 };

@@ -58,6 +58,12 @@ const adminCommand = async ([keyword, ...param] = []) => {
             .catch(() => "DB 초기화에 실패했습니다.");
     }
 
+    if (keyword === "테스트") {
+        return pgClient.test()
+            .then(() => "DB가 초기화 되었습니다.")
+            .catch(() => "DB 초기화에 실패했습니다.");
+    }
+
     if (keyword === "백업") {
         return backup()
             .then(() => "DB백업이 완료되었습니다.")
