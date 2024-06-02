@@ -9,7 +9,7 @@ const create = async (param) => {
         .catch(() => "리그 생성에 실패했습니다.");
 }
 
-const select = async (param) => {
+const getList = async (param) => {
     return pgClient
         .query(leagueDao.select)
         .then((res) => res.map((league) => `${league.league_id} ${league.league_name} ${league.league_date} ${league.join_date_limit} ${league.user_count_limit}`).join("\n"))
@@ -21,6 +21,13 @@ const join = async (param) => {
         .query(entryDao.create, param)
         .then(() => "리그 참가에 성공했습니다.")
         .catch(() => "리그 참가에 실패했습니다.");
+}
+
+const getEntries = async (param) => {
+    return pgClient
+        .query(entryDao.select, param)
+        .then((res) => res.map((entry) => `${entry.user_name} ${entry.uma_uid}`).join("\n"))
+        .catch(() => "실패");
 }
 
 const createMatch = async (param) => {
@@ -45,7 +52,7 @@ const leagueCommand = async ([keyword, ...param] = []) => {
     }
 
     if (keyword === "조회") {
-        return select()
+        return getList()
     }
     if (keyword === "생성") {
         return create(param)
@@ -53,7 +60,9 @@ const leagueCommand = async ([keyword, ...param] = []) => {
     if (keyword === "참가") {
         return join(param)
     }
-
+    if (keyword === "참가자") {
+        return getEntries()
+    }
     return "잘못된 명령어 입니다.";
 };
 
