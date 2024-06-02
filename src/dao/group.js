@@ -1,5 +1,5 @@
 const INIT = `CREATE TABLE IF NOT EXISTS groups (
-    group_id serial NOT NULL,
+    group_id serial UNIQUE NOT NULL,
     league_id serial NOT NULL,
     group_name varchar(50) NOT NULL,
     chat_channel_id varchar(50) UNIQUE NOT NULL,

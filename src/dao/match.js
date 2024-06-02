@@ -11,10 +11,10 @@ const INIT = `CREATE TABLE IF NOT EXISTS matches (
 const CREATE = `INSERT INTO matches (league_id, group_id, uma_uid) VALUES ($1, $2, $3, false);`;
 
 const RESET = `
-DELETE FROM entries
+DELETE FROM matches
 USING league
 WHERE
-    entries.league_id = league.league_id AND
+    matches.league_id = league.league_id AND
     league.league_name = $1
 `;
 
