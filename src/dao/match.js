@@ -12,9 +12,11 @@ const CREATE = `INSERT INTO matches (league_id, group_id, uma_uid, is_check_in) 
 
 const SELECT_BY_LEAGUE = `
 SELECT *
-FROM matches m, league l
+FROM matches m, league l, groups g, users u
 WHERE
     l.league_id = m.league_id AND
+    g.group_id = m.group_id AND
+    u.uma_uid = m.uma_uid AND
     l.league_name = $1;
 `;
 
