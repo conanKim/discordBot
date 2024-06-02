@@ -31,7 +31,7 @@ const create = async ([leagueName, groupName, bracketId, token]) => {
                "useOverlay": false,
                "overlaySetting": {
                  "version": "4",
-                 "rosters": res.map((entry, idx) => ({id: 'Hjk7eZbCaIzuHcj23456'+idx, name: entry.user_name})),
+                 "rosters": res.map((entry, idx) => ({id: 'UmaLeague' + entry.uma_uid, name: entry.user_name})),
                  "matchResults": [],
                  "bracketType": "round-robin",
                  "sortWeights": [],
