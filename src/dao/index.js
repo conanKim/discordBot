@@ -42,6 +42,9 @@ const test = async () => {
     await client.query(user.test, (err, res) => {
         console.log(user.init, err, res);
     });
+    await client.query(entry.test, (err, res) => {
+        console.log(entry.init, err, res);
+    });
 
     console.log("TEST DATA DONE");
 };
