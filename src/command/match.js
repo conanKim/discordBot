@@ -1,4 +1,5 @@
 const pgClient = require("../dao");
+const leagueDao = require("../dao/league");
 const entryDao = require("../dao/entry");
 const matchDao = require("../dao/match");
 const groupDao = require("../dao/group");
@@ -59,7 +60,7 @@ const create = async ([leagueName, groupName, bracketId, token]) => {
                 })
         }).then(async (res) => {
             const leagueData = await pgClient.query(leagueDao.selectByName, [leagueName]);
-            const leagueName = leagueData.league_name;
+            const leagueId = leagueData[0].league_id;
 
             console.log("TABLE RESET 시작")
             await pgClient.query(matchDao.reset, [leagueName])
@@ -67,30 +68,32 @@ const create = async ([leagueName, groupName, bracketId, token]) => {
             await pgClient.query(groupDao.reset, [leagueName])
             console.log("GROUP RESET 완료")
 
-            for (let i = 0; i < res.length % 3; i++) {
-                await pgClient.query(groupDao.create, [`${groupName} - ${i + 1}`])
+            for (let i = 0; i < res.length / 3; i++) {
+                await pgClient.query(groupDao.create, [leagueId, `${groupName} - ${i + 1}`, `CHANNEL_ID_${i + 1}`])
             }
             console.log("GROUP CREATE 완료")
 
             for (let i = 0; i < res.length / 3; i++) {
-                const groupData = await pgClient.query(groupDao.selectByLeague, [leagueName, `${groupName} - ${i + 1}`]);
-                const { group_id } = groupData[0];
+                const groupData = await pgClient.query(groupDao.selectByLeague, [leagueId, `${groupName} - ${i + 1}`]);
+		        const groupId = groupData[0].group_id;
 
-                for (let j = 0; j <= 3; j++) {
+                for (let j = 0; j < 3; j++) {
                     const row = res[i*3 + j]
-                    await pgClient.query(matchDao.create, [row.league_id, `${groupName} - ${i + 1}`, row.uma_uid])
+        			console.log(row)
+                    await pgClient.query(matchDao.create, [leagueId, groupId, row.uma_uid])
                 }
             }
             console.log("MATCH CREATE 완료")
 
             return "대진표 생성 성공"
         })
-        .catch(() => "실패");
+	        .catch((e) => {console.log(e); return "실패"});
+
 }
 
 const getMatches = async (param) => {
     return pgClient
-        .query(matchDao.select, param)
+        .query(matchDao.selectByLeague, param)
         .then((res) => {
             const matches = res.reduce((curr, prev) => {
                 prev[curr.group_name] ? prev[curr.group_name] = [...prev[curr.group_name], curr.user_name] : [curr.user_name];

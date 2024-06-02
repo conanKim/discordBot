@@ -8,14 +8,14 @@ const INIT = `CREATE TABLE IF NOT EXISTS groups (
     PRIMARY KEY (group_id, league_id)
 );`;
 
-const CREATE = `INSERT INTO groups (league_id, group_name, chat_channel_id) VALUES ($1, $2, $3, false);`;
+const CREATE = `INSERT INTO groups (league_id, group_name, chat_channel_id) VALUES ($1, $2, $3);`;
 
 const SELECT_BY_LEAGUE = `
 SELECT *
-FROM league l, group g
+FROM league l, groups g
 WHERE
     l.league_id = g.league_id AND
-    l.league_name = $1 AND
+    l.league_id = $1 AND
     g.group_name = $2
 ;`
 

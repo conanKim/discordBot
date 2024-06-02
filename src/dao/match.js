@@ -1,14 +1,22 @@
 const INIT = `CREATE TABLE IF NOT EXISTS matches (
-    league_id serial UNIQUE NOT NULL,
-    group_id serial UNIQUE NOT NULL,
-    uma_uid varchar(50) UNIQUE NOT NULL,
-    is_check_in boolean UNIQUE NOT NULL,
+    league_id serial NOT NULL,
+    group_id serial NOT NULL,
+    uma_uid varchar(50) NOT NULL,
+    is_check_in boolean NOT NULL,
     FOREIGN KEY (league_id) REFERENCES league (league_id),
     FOREIGN KEY (group_id) REFERENCES groups (group_id),
     FOREIGN KEY (uma_uid) REFERENCES users (uma_uid)
 );`;
 
-const CREATE = `INSERT INTO matches (league_id, group_id, uma_uid) VALUES ($1, $2, $3, false);`;
+const CREATE = `INSERT INTO matches (league_id, group_id, uma_uid, is_check_in) VALUES ($1, $2, $3, false);`;
+
+const SELECT_BY_LEAGUE = `
+SELECT *
+FROM matches m, league l
+WHERE
+    l.league_id = m.league_id AND
+    l.league_name = $1;
+`;
 
 const RESET = `
 DELETE FROM matches
@@ -21,5 +29,6 @@ WHERE
 module.exports = {
     init: INIT,
     create: CREATE,
+    selectByLeague: SELECT_BY_LEAGUE,
     reset: RESET,
 };
