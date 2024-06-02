@@ -13,11 +13,13 @@ VALUES ('네지트배', '2024-06-30', '2024-06-20', 81);
 `;
 
 const SELECT = `SELECT * FROM league;`
+const SELECT_BY_NAME = `SELECT * FROM league WHERE league_name = $1;`
 const CREATE = `INSERT INTO league (league_name, league_date, join_date_limit, user_count_limit) VALUES ($1, $2, $3, $4);`;
 
 module.exports = {
     init: INIT,
     test: TEST,
     select: SELECT,
+    selectByName: SELECT_BY_NAME,
     create: CREATE,
 };

@@ -58,6 +58,9 @@ const create = async ([leagueName, groupName, bracketId, token]) => {
                     throw e
                 })
         }).then(async (res) => {
+            const leagueData = await pgClient.query(leagueDao.selectByName, [leagueName]);
+            const leagueName = leagueData.league_name;
+
             console.log("TABLE RESET 시작")
             await pgClient.query(matchDao.reset, [leagueName])
             console.log("MATCH RESET 완료")
@@ -71,7 +74,7 @@ const create = async ([leagueName, groupName, bracketId, token]) => {
 
             for (let i = 0; i < res.length / 3; i++) {
                 const groupData = await pgClient.query(groupDao.selectByLeague, [leagueName, `${groupName} - ${i + 1}`]);
-                const { league_id, group_id } = groupData[0];
+                const { group_id } = groupData[0];
 
                 for (let j = 0; j <= 3; j++) {
                     const row = res[i*3 + j]
