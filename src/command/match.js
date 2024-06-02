@@ -16,7 +16,7 @@ const create = async ([leagueName, groupName, bracketId, token]) => {
 
             return matches;
         })
-        .then((res) => {
+        .then(async (res) => {
             const body = {
                "easyBracketId": "665aa0d65b276900074cb1dd",
                "organizeUserId": "665aa0bbbde5e230c677139d",
@@ -49,8 +49,16 @@ const create = async ([leagueName, groupName, bracketId, token]) => {
                  "id": "TVGX97An1epO4Jokt_9wP"
                }
             }
-            return putLvupGG(bracketId, body, token.replace(/(\r\n|\n|\r)/gm, "")).then(() => res)
-        }).then((res) => {
+
+            console.log("API 요청 시작")
+            return putLvupGG(bracketId, body, token.replace(/(\r\n|\n|\r)/gm, ""))
+                .then(() => res)
+                .catch((e) => {
+                    console.log(e)
+                    throw e
+                })
+        }).then(async (res) => {
+            console.log("TABLE RESET 시작")
             await pgClient.query(matchDao.reset, [leagueName])
             console.log("MATCH RESET 완료")
             await pgClient.query(groupDao.reset, [leagueName])
