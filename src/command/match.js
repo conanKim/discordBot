@@ -1,9 +1,12 @@
+const { ChannelType } = require("discord.js");
+
 const pgClient = require("../dao");
 const leagueDao = require("../dao/league");
 const entryDao = require("../dao/entry");
 const matchDao = require("../dao/match");
 const groupDao = require("../dao/group");
 const { putLvupGG } = require("../utils/utils");
+
 const create = async ([leagueName, bracketId, token], channelMgr) => {
     const leagueData = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0]
     return pgClient
@@ -82,9 +85,9 @@ const create = async ([leagueName, bracketId, token], channelMgr) => {
             console.log("GROUP RESET 완료")
 
 
-            message.guild.channels.create(leagueName, { type: 'category'}).then(async CategoryChannel => {
+            res.channelMgr.create(leagueName, { type: ChannelType.GuildCategory }).then(async CategoryChannel => {
                 for (let i = 0; i < res.entries.length / 3; i++) {
-                    message.guild.channels.create(`그룹 - ${i + 1}`, { type: 'text', parent: CategoryChannel})
+                    res.channelMgr.create(`그룹 - ${i + 1}`, { type: ChannelType.GuildText, parent: CategoryChannel })
                         .then(async TextChannel => {
                             await pgClient.query(groupDao.create, [leagueId, `그룹 - ${i + 1}`, CategoryChannel.id])
                         });
