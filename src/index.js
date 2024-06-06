@@ -92,7 +92,7 @@ client.on("messageCreate", async (message) => {
                 break;
 
             case "!대진표":
-                sendMessage(await matchCommand(param))
+                sendMessage(await matchCommand(param, message.author.id, message.guild.channels))
                 break;
 
             case "!관리자":

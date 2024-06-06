@@ -15,6 +15,14 @@ SELECT *
 FROM league l, groups g
 WHERE
     l.league_id = g.league_id AND
+    l.league_id = $1
+;`
+
+const SELECT_BY_NAME = `
+SELECT *
+FROM league l, groups g
+WHERE
+    l.league_id = g.league_id AND
     l.league_id = $1 AND
     g.group_name = $2
 ;`
@@ -30,6 +38,7 @@ WHERE
 module.exports = {
     init: INIT,
     create: CREATE,
+    selectByName: SELECT_BY_NAME,
     selectByLeague: SELECT_BY_LEAGUE,
     reset: RESET,
 };

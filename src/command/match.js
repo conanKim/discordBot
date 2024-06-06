@@ -67,21 +67,35 @@ const create = async ([leagueName, bracketId, token]) => {
         }).then(async (res) => {
             const leagueId = res.leagueData.league_id;
 
+            console.log("CHANNEL RESET 시작")
+            const groups = await pgClient.query(groupDao.selectByLeague, [leagueName])
+            for (let i = 0; i < groups.length; i++) {
+                await channelMgr.delete(groups[i].chat_channel_id, 'making room for new channels')
+                  .then(console.log)
+                  .catch(console.error);
+            }
+
             console.log("TABLE RESET 시작")
             await pgClient.query(matchDao.reset, [leagueName])
             console.log("MATCH RESET 완료")
             await pgClient.query(groupDao.reset, [leagueName])
             console.log("GROUP RESET 완료")
 
-            for (let i = 0; i < res.entries.length / 3; i++) {
-                await pgClient.query(groupDao.create, [leagueId, `그룹 - ${i + 1}`, `CHANNEL_ID_${i + 1}`])
-            }
+
+            message.guild.channels.create(leagueName, { type: 'category'}).then(CategoryChannel => {
+                for (let i = 0; i < res.entries.length / 3; i++) {
+                    message.guild.channels.create(`그룹 - ${i + 1}`, { type: 'text', parent: CategoryChannel})
+                        .then(TextChannel => {
+                            await pgClient.query(groupDao.create, [leagueId, `그룹 - ${i + 1}`, CategoryChannel.id])
+                        });
+                }
+            }).catch();
             console.log("GROUP CREATE 완료")
 
             for (let i = 0; i < 3; i++) {
                 const groupCount = res.entries.length / 3
                 for (let j = 0; j < groupCount; j++) {
-                    const groupData = await pgClient.query(groupDao.selectByLeague, [leagueId, `그룹 - ${j + 1}`]);
+                    const groupData = await pgClient.query(groupDao.selectByName, [leagueId, `그룹 - ${j + 1}`]);
                     const groupId = groupData[0].group_id;
 
                     const row = res.entries[i * groupCount + j]
@@ -111,7 +125,7 @@ const getMatches = async (param) => {
         .catch(() => "실패");
 }
 
-const matchCommand = async ([keyword, ...param] = [], discordId) => {
+const matchCommand = async ([keyword, ...param] = [], discordId, channelMgr) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
     emptyMsg += `!대진표 생성 {리그명} {lvup.gg URL} {lvup.gg 토큰}\n`;
@@ -122,7 +136,7 @@ const matchCommand = async ([keyword, ...param] = [], discordId) => {
     }
 
     if (keyword === "생성") {
-        return create(param)
+        return create(param, channelMgr)
     }
 
     if (keyword === "조회") {
