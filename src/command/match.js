@@ -13,12 +13,13 @@ const create = async ([leagueName, bracketId, token]) => {
                 .map(row => ({...row, seed: Math.random()}))
                 .sort((a, b) => a.random - b.random)
 
-            const dummyCount = entries.length - leagueData.user_count_limit;
+            const dummyCount = leagueData.user_count_limit - entries.length;
 
-            for(let i = 1; i <= dummyCount; i++) {
-                const id = i < 10 ? '0' + i : i
-                const offset = Math.floor(dummyCount / Math.floor(leagueData.user_count_limit / 3))
-                entries.splice(entries.length - 3 * (dummyCount - i) - offset, 0, {...entries[0], uma_uid: 'dummy00000' + id, user_name: '더미' + id })
+            for(let i = 0; i < dummyCount; i++) {
+                const id = i + 1 < 10 ? '0' + (i + 1) : i + 1
+                const groupCount = Math.floor(leagueData.user_count_limit / 3);
+                const offset = Math.floor(i / groupCount)
+                entries.splice(entries.length - 3 * (dummyCount - i % groupCount) - offset, 0, {...entries[0], uma_uid: 'dummy00000' + id, user_name: '더미' + id })
             }
 
             console.log(entries)
