@@ -17,9 +17,9 @@ const getList = async (param) => {
         .catch(() => "실패");
 }
 
-const join = async (leagueName, discordId) => {
+const join = async (param, discordId) => {
     const uid = (await pgClient.query(userDao.selectByDiscord, [discordId.toString()]))[0].uma_uid
-    const leagueId = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0].league_id
+    const leagueId = (await pgClient.query(leagueDao.selectByName, param))[0].league_id
     return pgClient
         .query(entryDao.create, [leagueId, uid])
         .then(() => "리그 참가에 성공했습니다.")
@@ -64,7 +64,7 @@ const leagueCommand = async ([keyword, ...param] = [], discordId) => {
         return join(param, discordId)
     }
     if (keyword === "참가자") {
-        return getEntries()
+        return getEntries(param)
     }
     return "잘못된 명령어 입니다.";
 };
