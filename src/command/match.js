@@ -8,11 +8,21 @@ const create = async ([leagueName, bracketId, token]) => {
     return pgClient
         .query(entryDao.select, [leagueName])
         .then((res) => {
-            const matches = res
+            const entries = res
                 .map(row => ({...row, seed: Math.random()}))
                 .sort((a, b) => a.random - b.random)
 
-            return matches;
+        const leagueData = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0];
+        const dummyCount = entries.length - leagueData.user_count_limit;
+
+        for(let i = 1; i <= dummyCount; i++) {
+            const id = i < 10 ? '0' + i : i
+            const offset = Math.floor(dummyCount / Math.floor(leagueData.user_count_limit / 3))
+            entries.splice(entries.length - 3 * (dummyCount - i) - offset, 0, {...entries[0], uma_uid: 'dummy00000' + id, user_name: '더미' + id })
+        }
+
+    console.log(entries)
+            return { leagueData, entries };
         })
         .then(async (res) => {
             const body = {
@@ -26,7 +36,7 @@ const create = async ([leagueName, bracketId, token]) => {
                "useOverlay": false,
                "overlaySetting": {
                  "version": "4",
-                 "rosters": res.map((entry, idx) => ({id: 'UmaLeague' + entry.uma_uid, name: entry.user_name})),
+                 "rosters": res.entries.map((entry, idx) => ({id: 'UmaLeague' + entry.uma_uid, name: entry.user_name})),
                  "matchResults": [],
                  "bracketType": "round-robin",
                  "sortWeights": [],
@@ -56,8 +66,7 @@ const create = async ([leagueName, bracketId, token]) => {
                     throw e
                 })
         }).then(async (res) => {
-            const leagueData = await pgClient.query(leagueDao.selectByName, [leagueName]);
-            const leagueId = leagueData[0].league_id;
+            const leagueId = res.leagueData.league_id;
 
             console.log("TABLE RESET 시작")
             await pgClient.query(matchDao.reset, [leagueName])
@@ -65,13 +74,13 @@ const create = async ([leagueName, bracketId, token]) => {
             await pgClient.query(groupDao.reset, [leagueName])
             console.log("GROUP RESET 완료")
 
-            for (let i = 0; i < res.length / 3; i++) {
+            for (let i = 0; i < res.entries.length / 3; i++) {
                 await pgClient.query(groupDao.create, [leagueId, `그룹 - ${i + 1}`, `CHANNEL_ID_${i + 1}`])
             }
             console.log("GROUP CREATE 완료")
 
             for (let i = 0; i < 3; i++) {
-                const groupCount = res.length / 3
+                const groupCount = res.entries.length / 3
                 for (let j = 0; j < groupCount; j++) {
                     const groupData = await pgClient.query(groupDao.selectByLeague, [leagueId, `그룹 - ${j + 1}`]);
                     const groupId = groupData[0].group_id;

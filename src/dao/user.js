@@ -4,6 +4,25 @@ const INIT = `CREATE TABLE IF NOT EXISTS users (
     discord_id varchar(50) UNIQUE NOT NULL,
     PRIMARY KEY (uma_uid)
 );
+
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000001', '더미01', '더미 디스코드01');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000002', '더미02', '더미 디스코드02');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000003', '더미03', '더미 디스코드03');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000004', '더미04', '더미 디스코드04');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000005', '더미05', '더미 디스코드05');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000006', '더미06', '더미 디스코드06');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000007', '더미07', '더미 디스코드07');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000008', '더미08', '더미 디스코드08');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000009', '더미09', '더미 디스코드09');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000010', '더미10', '더미 디스코드10');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000011', '더미11', '더미 디스코드11');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000012', '더미12', '더미 디스코드12');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000013', '더미13', '더미 디스코드13');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000014', '더미14', '더미 디스코드14');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000015', '더미15', '더미 디스코드15');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000016', '더미16', '더미 디스코드16');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000017', '더미17', '더미 디스코드17');
+INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000018', '더미18', '더미 디스코드18');
 `;
 
 const TEST = `

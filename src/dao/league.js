@@ -9,7 +9,7 @@ const INIT = `CREATE TABLE IF NOT EXISTS league (
 
 const TEST = `
 INSERT INTO league (league_name, league_date, join_date_limit, user_count_limit)
-VALUES ('네지트배', '2024-06-30', '2024-06-20', 81);
+VALUES ('네지트배', '2024-06-30', '2024-06-20', 27);
 `;
 
 const SELECT = `SELECT * FROM league;`
