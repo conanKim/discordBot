@@ -56,6 +56,6 @@ module.exports = {
     init: INIT,
     test: TEST,
     select: SELECT,
-    selectByDiscord, SELECT_BY_DISCORD,
+    selectByDiscord: SELECT_BY_DISCORD,
     create: CREATE,
 };

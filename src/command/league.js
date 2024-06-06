@@ -17,7 +17,7 @@ const getList = async (param) => {
 }
 
 const join = async (leagueName, discordId) => {
-    const uid = (await pgClient.query(userDao.selectByDiscord, discordId))[0]
+    const uid = (await pgClient.query(userDao.selectByDiscord, [discordId]))[0]
     const leagueId = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0].league_id
     return pgClient
         .query(entryDao.create, [leagueId, uid])
