@@ -8,7 +8,7 @@ import {
     allowKeyword, 
     gameChannelId, 
     generalChannelId 
-} from "../config.json";
+} from "../config.json" assert { type: "json" };
 import { Client, Intents } from "discord.js";
 
 
