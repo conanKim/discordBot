@@ -7,26 +7,26 @@ const INIT = `CREATE TABLE IF NOT EXISTS entries (
 );`;
 
 const TEST = `
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '0101010101010101');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '0202020202020202');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '0303030303030303');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '0404040404040404');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '0505050505050505');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '0606060606060606');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '0707070707070707');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '0808080808080808');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '0909090909090909');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '1010101010101010');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '1111111111111111');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '1212121212121212');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '1313131313131313');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '1414141414141414');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '1515151515151515');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '1616161616161616');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '1717171717171717');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '1818181818181818');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '1919191919191919');
-    INSERT INTO entries (league_id, uma_uid) VALUES (1, '2020202020202020');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '010101010101');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '020202020202');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '030303030303');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '040404040404');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '050505050505');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '060606060606');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '070707070707');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '080808080808');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '090909090909');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '101010101010');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '111111111111');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '121212121212');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '131313131313');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '141414141414');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '151515151515');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '161616161616');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '171717171717');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '181818181818');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '191919191919');
+    INSERT INTO entries (league_id, uma_uid) VALUES (1, '202020202020');
 `;
 
 const SELECT = `
