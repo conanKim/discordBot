@@ -1,5 +1,5 @@
-import { Client } from "pg";
-import { database } from "../../config.json" assert { type: "json" };
+import PG from "pg";
+import config from "../../config.json";
 
 import league from "./league.js";
 import user from "./user.js";
@@ -7,10 +7,11 @@ import group from "./group.js";
 import match from "./match.js";
 import entry from "./entry.js";
 
+const { Client } = PG;
 let client;
 
 const connect = async () => {
-    client = new Client(database);
+    client = new Client(config.database);
     await client.connect();
 
     await schema();
@@ -68,7 +69,7 @@ const query = (query, params) => {
     });
 };
 
-export {
+export default {
     client: client,
     query: query,
     connect: connect,

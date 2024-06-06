@@ -1,23 +1,24 @@
 // Require the necessary discord.js classes
-import { 
-    token, 
-    adminId, 
-    guildId, 
-    clientId, 
-    allowChannelId, 
-    allowKeyword, 
-    gameChannelId, 
-    generalChannelId 
-} from "../config.json" assert { type: "json" };
+import config from '../config.json'
 import { Client, Intents } from "discord.js";
 
 
 import PG from "./dao/index.js";
-import { adminCommand } from "./command/admin.js";
-import { leagueCommand } from "./command/league.js";
-import { userCommand } from "./command/user.js";
-import { matchCommand } from "./command/match.js";
+import adminCommand from "./command/admin.js";
+import leagueCommand from "./command/league.js";
+import userCommand from "./command/user.js";
+import matchCommand from "./command/match.js";
 
+const {
+    token,
+    adminId,
+    guildId,
+    clientId,
+    allowChannelId,
+    allowKeyword,
+    gameChannelId,
+    generalChannelId
+} = config;
 // Create a new client instance
 const client = new Client({
     intents: [

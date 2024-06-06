@@ -7,7 +7,7 @@ const DB_LIST = `
 SELECT * FROM information_schema.tables WHERE table_schema = 'public';
 `
 
-module.exports = {
+export default {
     reset: RESET,
     dbList: DB_LIST
 };

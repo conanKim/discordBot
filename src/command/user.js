@@ -1,5 +1,5 @@
-const pgClient from "../dao.js";
-const userDao from "../dao/user.js";
+import pgClient from "../dao/index.js";
+import userDao from "../dao/user.js";
 
 const create = async (param, discordId) => {
     return pgClient
@@ -34,6 +34,6 @@ const userCommand = async ([keyword, ...param] = [], discordId) => {
     return "잘못된 명령어 입니다.";
 };
 
-module.exports = {
+export default {
     userCommand,
 };

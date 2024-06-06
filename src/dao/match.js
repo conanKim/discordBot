@@ -28,7 +28,7 @@ WHERE
     league.league_name = $1
 `;
 
-module.exports = {
+export default {
     init: INIT,
     create: CREATE,
     selectByLeague: SELECT_BY_LEAGUE,

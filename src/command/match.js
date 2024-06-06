@@ -1,11 +1,14 @@
-import { ChannelType } from "discord.js";
+import DiscordJS from "discord.js";
 
-import pgClient from "../dao.js";
+import pgClient from "../dao/index.js";
 import leagueDao from "../dao/league.js";
 import entryDao from "../dao/entry.js";
 import matchDao from "../dao/match.js";
 import groupDao from "../dao/group.js";
-import { putLvupGG } from "../utils/utils.js";
+import utils from "../utils/utils.js";
+
+const { ChannelType } = DiscordJS;
+const { putLvupGG } = utils;
 
 const create = async ([leagueName, bracketId, token], channelMgr) => {
     const leagueData = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0]
@@ -149,6 +152,6 @@ const matchCommand = async ([keyword, ...param] = [], discordId, channelMgr) => 
     return "잘못된 명령어 입니다.";
 };
 
-module.exports = {
+export default {
     matchCommand,
 };

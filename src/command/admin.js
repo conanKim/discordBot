@@ -1,4 +1,4 @@
-import pgClient from "../dao.js";
+import pgClient from "../dao/index.js";
 import adminDao from "../dao/admin.js";
 
 const backup = async () => {
@@ -73,6 +73,6 @@ const adminCommand = async ([keyword, ...param] = [], discordId) => {
     return "잘못된 명령어 입니다.";
 };
 
-module.exports = {
+export default {
     adminCommand,
 };
