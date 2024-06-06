@@ -88,7 +88,7 @@ client.on("messageCreate", async (message) => {
                 break;
 
             case "!유저":
-                sendMessage(await userCommand(param))
+                sendMessage(await userCommand([...param, message.author.id]))
                 break;
 
             case "!대진표":
