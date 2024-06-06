@@ -82,10 +82,10 @@ const create = async ([leagueName, bracketId, token], channelMgr) => {
             console.log("GROUP RESET 완료")
 
 
-            message.guild.channels.create(leagueName, { type: 'category'}).then(CategoryChannel => {
+            message.guild.channels.create(leagueName, { type: 'category'}).then(async CategoryChannel => {
                 for (let i = 0; i < res.entries.length / 3; i++) {
                     message.guild.channels.create(`그룹 - ${i + 1}`, { type: 'text', parent: CategoryChannel})
-                        .then(TextChannel => {
+                        .then(async TextChannel => {
                             await pgClient.query(groupDao.create, [leagueId, `그룹 - ${i + 1}`, CategoryChannel.id])
                         });
                 }
