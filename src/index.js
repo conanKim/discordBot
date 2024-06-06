@@ -12,11 +12,11 @@ import {
 import { Client, Intents } from "discord.js";
 
 
-import PG from "./dao/index";
-import { adminCommand } from "./command/admin";
-import { leagueCommand } from "./command/league";
-import { userCommand } from "./command/user";
-import { matchCommand } from "./command/match";
+import PG from "./dao/index.js";
+import { adminCommand } from "./command/admin.js";
+import { leagueCommand } from "./command/league.js";
+import { userCommand } from "./command/user.js";
+import { matchCommand } from "./command/match.js";
 
 // Create a new client instance
 const client = new Client({

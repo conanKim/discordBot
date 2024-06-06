@@ -1,7 +1,7 @@
-import pgClient from "../dao";
-import leagueDao from "../dao/league";
-import entryDao from "../dao/entry";
-import userDao from "../dao/user";
+import pgClient from "../dao.js";
+import leagueDao from "../dao/league.js";
+import entryDao from "../dao/entry.js";
+import userDao from "../dao/user.js";
 
 const create = async (param) => {
     return pgClient

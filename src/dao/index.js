@@ -1,11 +1,11 @@
 import { Client } from "pg";
 import { database } from "../../config.json";
 
-import league from "./league";
-import user from "./user";
-import group from "./group";
-import match from "./match";
-import entry from "./entry";
+import league from "./league.js";
+import user from "./user.js";
+import group from "./group.js";
+import match from "./match.js";
+import entry from "./entry.js";
 
 let client;
 
@@ -68,7 +68,7 @@ const query = (query, params) => {
     });
 };
 
-module.exports = {
+export {
     client: client,
     query: query,
     connect: connect,
