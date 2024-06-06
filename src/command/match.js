@@ -5,6 +5,7 @@ const matchDao = require("../dao/match");
 const groupDao = require("../dao/group");
 const { putLvupGG } = require("../utils/utils");
 const create = async ([leagueName, bracketId, token]) => {
+    const leagueData = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0]
     return pgClient
         .query(entryDao.select, [leagueName])
         .then((res) => {
@@ -12,17 +13,16 @@ const create = async ([leagueName, bracketId, token]) => {
                 .map(row => ({...row, seed: Math.random()}))
                 .sort((a, b) => a.random - b.random)
 
-        const leagueData = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0];
-        const dummyCount = entries.length - leagueData.user_count_limit;
+            const dummyCount = entries.length - leagueData.user_count_limit;
 
-        for(let i = 1; i <= dummyCount; i++) {
-            const id = i < 10 ? '0' + i : i
-            const offset = Math.floor(dummyCount / Math.floor(leagueData.user_count_limit / 3))
-            entries.splice(entries.length - 3 * (dummyCount - i) - offset, 0, {...entries[0], uma_uid: 'dummy00000' + id, user_name: '더미' + id })
-        }
+            for(let i = 1; i <= dummyCount; i++) {
+                const id = i < 10 ? '0' + i : i
+                const offset = Math.floor(dummyCount / Math.floor(leagueData.user_count_limit / 3))
+                entries.splice(entries.length - 3 * (dummyCount - i) - offset, 0, {...entries[0], uma_uid: 'dummy00000' + id, user_name: '더미' + id })
+            }
 
-    console.log(entries)
-            return { leagueData, entries };
+            console.log(entries)
+            return { leagueData, entries }
         })
         .then(async (res) => {
             const body = {
