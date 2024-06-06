@@ -4,9 +4,6 @@ const INIT = `CREATE TABLE IF NOT EXISTS users (
     discord_id varchar(50) UNIQUE NOT NULL,
     PRIMARY KEY (uma_uid)
 );
-
-INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000001', '더미01', '더미 디스코드01');
-INSERT INTO users (uma_uid, user_name, discord_id) VALUES ('dummy0000002', '더미02', '더미 디스코드02');
 `;
 
 const TEST = `
