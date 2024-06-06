@@ -1,5 +1,5 @@
-const pgClient = require("../dao");
-const adminDao = require("../dao/admin");
+import pgClient from "../dao";
+import adminDao from "../dao/admin";
 
 const backup = async () => {
     const fs = require('fs')

@@ -1,7 +1,7 @@
-const pgClient = require("../dao");
-const leagueDao = require("../dao/league");
-const entryDao = require("../dao/entry");
-const userDao = require("../dao/user");
+import pgClient from "../dao";
+import leagueDao from "../dao/league";
+import entryDao from "../dao/entry";
+import userDao from "../dao/user";
 
 const create = async (param) => {
     return pgClient

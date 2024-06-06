@@ -1,5 +1,5 @@
-const pgClient = require("../dao");
-const userDao = require("../dao/user");
+const pgClient from "../dao";
+const userDao from "../dao/user";
 
 const create = async (param, discordId) => {
     return pgClient

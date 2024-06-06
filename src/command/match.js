@@ -1,11 +1,11 @@
-const { ChannelType } = require("discord.js");
+import { ChannelType } from "discord.js";
 
-const pgClient = require("../dao");
-const leagueDao = require("../dao/league");
-const entryDao = require("../dao/entry");
-const matchDao = require("../dao/match");
-const groupDao = require("../dao/group");
-const { putLvupGG } = require("../utils/utils");
+import pgClient from "../dao";
+import leagueDao from "../dao/league";
+import entryDao from "../dao/entry";
+import matchDao from "../dao/match";
+import groupDao from "../dao/group";
+import { putLvupGG } from "../utils/utils";
 
 const create = async ([leagueName, bracketId, token], channelMgr) => {
     const leagueData = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0]

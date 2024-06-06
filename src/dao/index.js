@@ -1,12 +1,13 @@
-const { Client } = require("pg");
-const { database } = require("../../config.json");
-let client;
+import { Client } from "pg";
+import { database } from "../../config.json";
 
-const league = require("./league");
-const user = require("./user");
-const group = require("./group");
-const match = require("./match");
-const entry = require("./entry");
+import league from "./league";
+import user from "./user";
+import group from "./group";
+import match from "./match";
+import entry from "./entry";
+
+let client;
 
 const connect = async () => {
     client = new Client(database);

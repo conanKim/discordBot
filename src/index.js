@@ -1,5 +1,5 @@
 // Require the necessary discord.js classes
-const { 
+import { 
     token, 
     adminId, 
     guildId, 
@@ -8,15 +8,15 @@ const {
     allowKeyword, 
     gameChannelId, 
     generalChannelId 
-} = require("../config.json");
-const { Client, Intents } = require("discord.js");
+} from "../config.json";
+import { Client, Intents } from "discord.js";
 
 
-const PG = require("./dao/index");
-const { adminCommand } = require("./command/admin");
-const { leagueCommand } = require("./command/league");
-const { userCommand } = require("./command/user");
-const { matchCommand } = require("./command/match");
+import PG from "./dao/index";
+import { adminCommand } from "./command/admin";
+import { leagueCommand } from "./command/league";
+import { userCommand } from "./command/user";
+import { matchCommand } from "./command/match";
 
 // Create a new client instance
 const client = new Client({
