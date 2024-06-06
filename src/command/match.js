@@ -17,9 +17,10 @@ const create = async ([leagueName, bracketId, token]) => {
 
             for(let i = 0; i < dummyCount; i++) {
                 const id = i + 1 < 10 ? '0' + (i + 1) : i + 1
-                const groupCount = Math.floor(leagueData.user_count_limit / 3);
+                const groupCount = Math.floor(leagueData.user_count_limit / 3); // 9
+                // 21, 18, 15, 12, 9, 6, 3
                 const offset = Math.floor(i / groupCount)
-                entries.splice(entries.length - 3 * (dummyCount - i % groupCount) - offset, 0, {...entries[0], uma_uid: 'dummy00000' + id, user_name: '더미' + id })
+                entries.splice((dummyCount - i % groupCount) * 3 - offset, 0, {...entries[0], uma_uid: 'dummy00000' + id, user_name: '더미' + id })
             }
 
             console.log(entries)
