@@ -4,7 +4,7 @@ const entryDao = require("../dao/entry");
 const matchDao = require("../dao/match");
 const groupDao = require("../dao/group");
 const { putLvupGG } = require("../utils/utils");
-const create = async ([leagueName, bracketId, token]) => {
+const create = async ([leagueName, bracketId, token], channelMgr) => {
     const leagueData = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0]
     return pgClient
         .query(entryDao.select, [leagueName])
@@ -21,7 +21,7 @@ const create = async ([leagueName, bracketId, token]) => {
             }
 
             console.log(entries)
-            return { leagueData, entries }
+            return { leagueData, entries, channelMgr }
         })
         .then(async (res) => {
             const body = {
@@ -68,9 +68,9 @@ const create = async ([leagueName, bracketId, token]) => {
             const leagueId = res.leagueData.league_id;
 
             console.log("CHANNEL RESET 시작")
-            const groups = await pgClient.query(groupDao.selectByLeague, [leagueName])
+            const groups = await pgClient.query(groupDao.selectByLeague, [leagueId])
             for (let i = 0; i < groups.length; i++) {
-                await channelMgr.delete(groups[i].chat_channel_id, 'making room for new channels')
+                await res.channelMgr.delete(groups[i].chat_channel_id, 'making room for new channels')
                   .then(console.log)
                   .catch(console.error);
             }
