@@ -1,13 +1,13 @@
 // Require the necessary discord.js classes
-import config from '../config.json'
+import config from '../config.json' assert { type: "json" }
 import { Client, Intents } from "discord.js";
 
 
 import PG from "./dao/index.js";
-import adminCommand from "./command/admin.js";
-import leagueCommand from "./command/league.js";
-import userCommand from "./command/user.js";
-import matchCommand from "./command/match.js";
+import Admin from "./command/admin.js";
+import League from "./command/league.js";
+import User from "./command/user.js";
+import Match from "./command/match.js";
 
 const {
     token,
@@ -85,21 +85,21 @@ client.on("messageCreate", async (message) => {
                 break;
 
             case "!리그":
-                sendMessage(await leagueCommand(param, message.author.id))
+                sendMessage(await League.command(param, message.author.id))
                 break;
 
             case "!유저":
-                sendMessage(await userCommand(param, message.author.id))
+                sendMessage(await User.command(param, message.author.id))
                 break;
 
             case "!대진표":
-                sendMessage(await matchCommand(param, message.author.id, message.guild.channels))
+                sendMessage(await Match.command(param, message.author.id, message.guild.channels))
                 break;
 
             case "!관리자":
                 if (message.author.id !== adminId) return sendMessage("권한이 없습니다.");
 
-                const resultMsg = await adminCommand(param);
+                const resultMsg = await Admin.command(param);
                 sendMessage(resultMsg);
                 break;
 

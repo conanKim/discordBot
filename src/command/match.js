@@ -153,5 +153,5 @@ const matchCommand = async ([keyword, ...param] = [], discordId, channelMgr) => 
 };
 
 export default {
-    matchCommand,
+    command: matchCommand,
 };

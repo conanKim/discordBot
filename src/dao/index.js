@@ -1,5 +1,5 @@
 import PG from "pg";
-import config from "../../config.json";
+import config from "../../config.json" assert { type: "json" };
 
 import league from "./league.js";
 import user from "./user.js";

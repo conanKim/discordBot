@@ -70,5 +70,5 @@ const leagueCommand = async ([keyword, ...param] = [], discordId) => {
 };
 
 export default {
-    leagueCommand,
+    command: leagueCommand,
 };

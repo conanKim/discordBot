@@ -74,5 +74,5 @@ const adminCommand = async ([keyword, ...param] = [], discordId) => {
 };
 
 export default {
-    adminCommand,
+    command: adminCommand
 };

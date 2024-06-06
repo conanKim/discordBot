@@ -35,5 +35,5 @@ const userCommand = async ([keyword, ...param] = [], discordId) => {
 };
 
 export default {
-    userCommand,
+    command: userCommand,
 };
