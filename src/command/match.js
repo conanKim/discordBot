@@ -4,7 +4,7 @@ const entryDao = require("../dao/entry");
 const matchDao = require("../dao/match");
 const groupDao = require("../dao/group");
 const { putLvupGG } = require("../utils/utils");
-const create = async ([leagueName, groupName, bracketId, token]) => {
+const create = async ([leagueName, bracketId, token]) => {
     return pgClient
         .query(entryDao.select, [leagueName])
         .then((res) => {
@@ -12,18 +12,13 @@ const create = async ([leagueName, groupName, bracketId, token]) => {
                 .map(row => ({...row, seed: Math.random()}))
                 .sort((a, b) => a.random - b.random)
 
-            console.log(matches)
-
-            if (matches.length % 3 !== 0) matches.push({...matches[0], uma_uid: 'dummy0000001', user_name: '더미' })
-            if (matches.length % 3 !== 0) matches.splice(matches.length - 3, 0, {...matches[0], uma_uid: 'dummy0000002', user_name: '더미' })
-
             return matches;
         })
         .then(async (res) => {
             const body = {
                "easyBracketId": "665aa0d65b276900074cb1dd",
                "organizeUserId": "665aa0bbbde5e230c677139d",
-               "title": `${leagueName} - ${groupName}`,
+               "title": `${leagueName}`,
                "status": "PRE",
                "participantSize": 1,
                "participantPerGroupSize": null,
@@ -71,14 +66,14 @@ const create = async ([leagueName, groupName, bracketId, token]) => {
             console.log("GROUP RESET 완료")
 
             for (let i = 0; i < res.length / 3; i++) {
-                await pgClient.query(groupDao.create, [leagueId, `${groupName} - ${i + 1}`, `CHANNEL_ID_${i + 1}`])
+                await pgClient.query(groupDao.create, [leagueId, `그룹 - ${i + 1}`, `CHANNEL_ID_${i + 1}`])
             }
             console.log("GROUP CREATE 완료")
 
             for (let i = 0; i < 3; i++) {
                 const groupCount = res.length / 3
                 for (let j = 0; j < groupCount; j++) {
-                    const groupData = await pgClient.query(groupDao.selectByLeague, [leagueId, `${groupName} - ${j + 1}`]);
+                    const groupData = await pgClient.query(groupDao.selectByLeague, [leagueId, `그룹 - ${j + 1}`]);
                     const groupId = groupData[0].group_id;
 
                     const row = res[i * groupCount + j]
