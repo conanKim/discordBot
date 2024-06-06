@@ -111,7 +111,7 @@ const getMatches = async (param) => {
         .catch(() => "실패");
 }
 
-const matchCommand = async ([keyword, ...param] = []) => {
+const matchCommand = async ([keyword, ...param] = [], discordId) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
     emptyMsg += `!대진표 생성 {리그명} {lvup.gg URL} {lvup.gg 토큰}\n`;

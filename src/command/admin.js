@@ -41,7 +41,7 @@ const backup = async () => {
     
 }
 
-const adminCommand = async ([keyword, ...param] = []) => {
+const adminCommand = async ([keyword, ...param] = [], discordId) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
     emptyMsg += `!관리자 초기화\n`;
