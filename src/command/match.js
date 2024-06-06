@@ -84,7 +84,7 @@ const create = async ([leagueName, bracketId, token]) => {
                     const groupData = await pgClient.query(groupDao.selectByLeague, [leagueId, `그룹 - ${j + 1}`]);
                     const groupId = groupData[0].group_id;
 
-                    const row = res[i * groupCount + j]
+                    const row = res.entries[i * groupCount + j]
         			console.log(row)
                     await pgClient.query(matchDao.create, [leagueId, groupId, row.uma_uid])
                 }
