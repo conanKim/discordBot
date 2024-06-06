@@ -1,5 +1,5 @@
 import { Client } from "pg";
-import { database } from "../../config.json";
+import { database } from "../../config.json" assert { type: "json" };
 
 import league from "./league.js";
 import user from "./user.js";
