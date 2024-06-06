@@ -1,6 +1,7 @@
 const pgClient = require("../dao");
 const leagueDao = require("../dao/league");
 const entryDao = require("../dao/entry");
+const userDao = require("../dao/user");
 
 const create = async (param) => {
     return pgClient
@@ -17,7 +18,7 @@ const getList = async (param) => {
 }
 
 const join = async (leagueName, discordId) => {
-    const uid = (await pgClient.query(userDao.selectByDiscord, [discordId]))[0].discord_id
+    const uid = (await pgClient.query(userDao.selectByDiscord, [discordId.toString()]))[0].uma_uid
     const leagueId = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0].league_id
     return pgClient
         .query(entryDao.create, [leagueId, uid])
