@@ -14,7 +14,7 @@ const create = async ([leagueName, bracketId, token], channelMgr) => {
         .then((res) => {
             const entries = res
                 .map(row => ({...row, seed: Math.random()}))
-                .sort((a, b) => a.random - b.random)
+                .sort((a, b) => a.seed - b.seed)
 
             const dummyCount = leagueData.user_count_limit - entries.length;
 
