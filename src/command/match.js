@@ -1,4 +1,4 @@
-const { ChannelType } = require("discord.js");
+const { ChannelType, PermissionsBitField } = require("discord.js");
 
 const pgClient = require("../dao");
 const leagueDao = require("../dao/league");
@@ -7,7 +7,7 @@ const matchDao = require("../dao/match");
 const groupDao = require("../dao/group");
 const { putLvupGG } = require("../utils/utils");
 
-const { adminId } = require("../../../config.json");
+const { adminId, clientId } = require("../../config.json");
 
 const create = async ([leagueName, bracketId, token], guildMgr) => {
     const leagueData = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0]
@@ -86,25 +86,35 @@ const create = async ([leagueName, bracketId, token], guildMgr) => {
             await pgClient.query(groupDao.reset, [leagueName])
             console.log("GROUP RESET 완료")
 
-
-            await res.guildMgr.channels.create({ name: leagueName, type: ChannelType.GuildCategory }).then(async CategoryChannel => {
+            const everyoneRole = guildMgr.roles.everyone;
+            /*
+            await res.guildMgr.channels.create({ name: leagueName, type: ChannelType.GuildCategory, permissionsOverwrites: [
+                            ...adminId.map(admin => ({type: 'user', id: admin, allow: [PermissionsBitField.Flags.ViewChannel]})),
+{type: 'user', id: clientId, allow: [PermissionsBitField.Flags.ViewChannel]},
+                                {type: 'role', id: everyoneRole.id, deny: [PermissionsBitField.Flags.ViewChannel]},
+                        ] }).then(async CategoryChannel => {
                 for (let i = 0; i < res.entries.length / 3; i++) {
-                    const everyoneRole = guild.roles.everyone;
 
-                    await res.guildMgr.channels.create({ 
-                        name: `그룹 - ${i + 1}`, 
+                    await res.guildMgr.channels.create({
+                        name: `그룹 - ${i + 1}`,
                         type: ChannelType.GuildText,
-                        parent: CategoryChannel, 
+                        parent: CategoryChannel,
                         permissionsOverwrites: [
-                            ...adminId.map(admin => (id: admin, allow: [PermissionsBitField.Flags.ViewChannel]})),
-                            {id: client.user.id, allow: [PermissionsBitField.Flags.ViewChannel]},
-                            {id: everyoneRole.id, deny: [PermissionsBitField.Flags.ViewChannel]},
+                            ...adminId.map(admin => ({type: 'member', id: admin, allow: [PermissionsBitField.Flags.ViewChannel]})),
+    {type: 'member', id: clientId, allow: [PermissionsBitField.Flags.ViewChannel]},
+                                {type: 'role', id: everyoneRole.id, deny: [PermissionsBitField.Flags.ViewChannel]},
                         ],
                     }).then(async TextChannel => {
                         await pgClient.query(groupDao.create, [leagueId, `그룹 - ${i + 1}`, TextChannel.id])
                     });
                 }
             }).catch();
+            */
+            //임시코드
+            for (let i = 0; i < res.entries.length / 3; i++) {
+                await pgClient.query(groupDao.create, [leagueId, `그룹 - ${i + 1}`, `채널아이디 - ${i + 1}`])
+            }
+
             console.log("GROUP CREATE 완료")
 
             const groupCount = res.entries.length / 3
@@ -121,20 +131,19 @@ const create = async ([leagueName, bracketId, token], guildMgr) => {
             }
 
             for (let i = 0; i < groupCount; i++) {
-                const matchData = await pgClient.query(matchDao.selectByGroup, [leagueId, `그룹 - ${j + 1}`]);
+                const matchData = await pgClient.query(matchDao.selectByGroup, [leagueName, `그룹 - ${i + 1}`]);
                 console.log(matchData)
-                res.guildMgr.channels.permissionOverwrites.set(
+                /*await res.guildMgr.channels.resolve(matchData[0].chat_channel_id).permissionOverwrites.set(
                     matchData.filter(data => data.discord_id !== "DUMMY").map(data => ({
-                        id: data.discord_id,
+                            type: 'member', id: data.discord_id,
                         allow: [PermissionsBitField.Flags.ViewChannel],
                     }))
-                )
+                )*/
             }
             console.log("MATCH CREATE 완료")
-
-            return "대진표 생성 성공"
+            return `대진표 생성 성공 (https://lvup.gg/easy/bracket/${bracketId})`
         })
-	        .catch((e) => {console.log(e); return "실패"});
+    .catch((e) => {console.log(e); return "실패"});
 
 }
 
