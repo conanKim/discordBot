@@ -9,7 +9,7 @@ const {
     gameChannelId, 
     generalChannelId 
 } = require("../config.json");
-const { Client, Intents } = require("discord.js");
+const { Client, GatewayIntentBits, Partials } = require("discord.js");
 
 
 const PG = require("./dao/index");
@@ -21,12 +21,13 @@ const { matchCommand } = require("./command/match");
 // Create a new client instance
 const client = new Client({
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.DIRECT_MESSAGES,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.MessageContent
     ],
-    partials: ["MESSAGE", "CHANNEL", "REACTION"],
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 
 // When the client is ready, run this code (only once)
