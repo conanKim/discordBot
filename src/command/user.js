@@ -19,6 +19,7 @@ const userCommand = async ([keyword, ...param] = [], discordId) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
     emptyMsg += `!유저 생성 {유저명} {uid}\n`;
+    emptyMsg += `!유저 조회\n`;
 
     if (!keyword) {
         return emptyMsg;

@@ -84,10 +84,12 @@ client.on("messageCreate", async (message) => {
                 sendMessage("pong!");
                 break;
 
+            case "!대회":
             case "!리그":
                 sendMessage(await leagueCommand(param, message.author.id))
                 break;
 
+            case "!참가자":
             case "!유저":
                 sendMessage(await userCommand(param, message.author.id))
                 break;

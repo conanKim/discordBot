@@ -49,6 +49,9 @@ const leagueCommand = async ([keyword, ...param] = [], discordId) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
     emptyMsg += `!리그 생성 {리그명} {리그일자} {참가마감} {참가인원}\n`;
+    emptyMsg += `!리그 조회\n`;
+    emptyMsg += `!리그 참가 {리그명}\n`;
+    emptyMsg += `!리그 참가자 {리그명}\n`;
 
     if (!keyword) {
         return emptyMsg;
