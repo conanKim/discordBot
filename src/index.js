@@ -1,24 +1,23 @@
 // Require the necessary discord.js classes
-import config from '../config.json' assert { type: "json" }
-import { Client, Intents } from "discord.js";
+const { 
+    token, 
+    adminId, 
+    guildId, 
+    clientId, 
+    allowChannelId, 
+    allowKeyword, 
+    gameChannelId, 
+    generalChannelId 
+} = require("../config.json");
+const { Client, Intents } = require("discord.js");
 
 
-import PG from "./dao/index.js";
-import Admin from "./command/admin.js";
-import League from "./command/league.js";
-import User from "./command/user.js";
-import Match from "./command/match.js";
+const PG = require("./dao/index");
+const { adminCommand } = require("./command/admin");
+const { leagueCommand } = require("./command/league");
+const { userCommand } = require("./command/user");
+const { matchCommand } = require("./command/match");
 
-const {
-    token,
-    adminId,
-    guildId,
-    clientId,
-    allowChannelId,
-    allowKeyword,
-    gameChannelId,
-    generalChannelId
-} = config;
 // Create a new client instance
 const client = new Client({
     intents: [
@@ -85,21 +84,21 @@ client.on("messageCreate", async (message) => {
                 break;
 
             case "!리그":
-                sendMessage(await League.command(param, message.author.id))
+                sendMessage(await leagueCommand(param, message.author.id))
                 break;
 
             case "!유저":
-                sendMessage(await User.command(param, message.author.id))
+                sendMessage(await userCommand(param, message.author.id))
                 break;
 
             case "!대진표":
-                sendMessage(await Match.command(param, message.author.id, message.guild.channels))
+                sendMessage(await matchCommand(param, message.author.id, message.guild.channels))
                 break;
 
             case "!관리자":
                 if (message.author.id !== adminId) return sendMessage("권한이 없습니다.");
 
-                const resultMsg = await Admin.command(param);
+                const resultMsg = await adminCommand(param);
                 sendMessage(resultMsg);
                 break;
 

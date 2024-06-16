@@ -1,17 +1,15 @@
-import PG from "pg";
-import config from "../../config.json" assert { type: "json" };
-
-import league from "./league.js";
-import user from "./user.js";
-import group from "./group.js";
-import match from "./match.js";
-import entry from "./entry.js";
-
-const { Client } = PG;
+const { Client } = require("pg");
+const { database } = require("../../config.json");
 let client;
 
+const league = require("./league");
+const user = require("./user");
+const group = require("./group");
+const match = require("./match");
+const entry = require("./entry");
+
 const connect = async () => {
-    client = new Client(config.database);
+    client = new Client(database);
     await client.connect();
 
     await schema();
@@ -69,7 +67,7 @@ const query = (query, params) => {
     });
 };
 
-export default {
+module.exports = {
     client: client,
     query: query,
     connect: connect,

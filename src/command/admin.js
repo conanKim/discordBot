@@ -1,5 +1,5 @@
-import pgClient from "../dao/index.js";
-import adminDao from "../dao/admin.js";
+const pgClient = require("../dao");
+const adminDao = require("../dao/admin");
 
 const backup = async () => {
     const fs = require('fs')
@@ -73,6 +73,6 @@ const adminCommand = async ([keyword, ...param] = [], discordId) => {
     return "잘못된 명령어 입니다.";
 };
 
-export default {
-    command: adminCommand
+module.exports = {
+    adminCommand,
 };

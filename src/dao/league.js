@@ -16,7 +16,7 @@ const SELECT = `SELECT * FROM league;`
 const SELECT_BY_NAME = `SELECT * FROM league WHERE league_name = $1;`
 const CREATE = `INSERT INTO league (league_name, league_date, join_date_limit, user_count_limit) VALUES ($1, $2, $3, $4);`;
 
-export default {
+module.exports = {
     init: INIT,
     test: TEST,
     select: SELECT,

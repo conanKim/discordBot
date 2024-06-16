@@ -43,7 +43,7 @@ WHERE
 
 const CREATE = `INSERT INTO entries (league_id, uma_uid) VALUES ($1, $2);`;
 
-export default {
+module.exports = {
     init: INIT,
     test: TEST,
     select: SELECT,

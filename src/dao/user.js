@@ -52,7 +52,7 @@ const SELECT = `SELECT * FROM users;`
 const SELECT_BY_DISCORD = `SELECT * FROM users WHERE discord_id = $1;`
 const CREATE = `INSERT INTO users (uma_uid, user_name, discord_id) VALUES ($2, $1, $3);`;
 
-export default {
+module.exports = {
     init: INIT,
     test: TEST,
     select: SELECT,

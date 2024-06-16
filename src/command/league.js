@@ -1,7 +1,7 @@
-import pgClient from "../dao/index.js";
-import leagueDao from "../dao/league.js";
-import entryDao from "../dao/entry.js";
-import userDao from "../dao/user.js";
+const pgClient = require("../dao");
+const leagueDao = require("../dao/league");
+const entryDao = require("../dao/entry");
+const userDao = require("../dao/user");
 
 const create = async (param) => {
     return pgClient
@@ -69,6 +69,6 @@ const leagueCommand = async ([keyword, ...param] = [], discordId) => {
     return "잘못된 명령어 입니다.";
 };
 
-export default {
-    command: leagueCommand,
+module.exports = {
+    leagueCommand,
 };
