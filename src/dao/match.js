@@ -20,6 +20,17 @@ WHERE
     l.league_name = $1;
 `;
 
+const SELECT_BY_GROUP = `
+SELECT *
+FROM matches m, league l, groups g, users u
+WHERE
+    l.league_id = m.league_id AND
+    g.group_id = m.group_id AND
+    u.uma_uid = m.uma_uid AND
+    l.league_name = $1 AND
+    g.group_name = $2;
+`;
+
 const RESET = `
 DELETE FROM matches
 USING league
@@ -32,5 +43,6 @@ module.exports = {
     init: INIT,
     create: CREATE,
     selectByLeague: SELECT_BY_LEAGUE,
+    selectByGroup: SELECT_BY_GROUP,
     reset: RESET,
 };

@@ -30,7 +30,7 @@ const TEST = `
 `;
 
 const SELECT = `
-SELECT e.league_id, e.uma_uid, u.user_name
+SELECT e.league_id, e.uma_uid, u.user_name, u.discord_id
 FROM
     entries e,
     users u,

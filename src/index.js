@@ -93,11 +93,11 @@ client.on("messageCreate", async (message) => {
                 break;
 
             case "!대진표":
-                sendMessage(await matchCommand(param, message.author.id, message.guild.channels))
+                sendMessage(await matchCommand(param, message.author.id, message.guild))
                 break;
 
             case "!관리자":
-                if (message.author.id !== adminId) return sendMessage("권한이 없습니다.");
+                if (!adminId.includes(message.author.id)) return sendMessage("권한이 없습니다.");
 
                 const resultMsg = await adminCommand(param);
                 sendMessage(resultMsg);

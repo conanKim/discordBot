@@ -7,7 +7,9 @@ const matchDao = require("../dao/match");
 const groupDao = require("../dao/group");
 const { putLvupGG } = require("../utils/utils");
 
-const create = async ([leagueName, bracketId, token], channelMgr) => {
+const { adminId } = require("../../../config.json");
+
+const create = async ([leagueName, bracketId, token], guildMgr) => {
     const leagueData = (await pgClient.query(leagueDao.selectByName, [leagueName]))[0]
     return pgClient
         .query(entryDao.select, [leagueName])
@@ -20,11 +22,11 @@ const create = async ([leagueName, bracketId, token], channelMgr) => {
 
             for(let i = 0; i < dummyCount; i++) {
                 const id = i + 1 < 10 ? '0' + (i + 1) : i + 1
-                entries.push({...entries[0], uma_uid: 'dummy00000' + id, user_name: '더미' + id })
+                entries.push({...entries[0], uma_uid: 'dummy00000' + id, user_name: '더미' + id, discord_id: 'DUMMY' })
             }
 
             console.log(entries)
-            return { leagueData, entries, channelMgr }
+            return { leagueData, entries, guildMgr }
         })
         .then(async (res) => {
             const body = {
@@ -73,7 +75,7 @@ const create = async ([leagueName, bracketId, token], channelMgr) => {
             console.log("CHANNEL RESET 시작")
             const groups = await pgClient.query(groupDao.selectByLeague, [leagueId])
             for (let i = 0; i < groups.length; i++) {
-                await res.channelMgr.delete(groups[i].chat_channel_id, 'making room for new channels')
+                await res.guildMgr.channels.delete(groups[i].chat_channel_id, 'making room for new channels')
                   .then(console.log)
                   .catch(console.error);
             }
@@ -85,18 +87,29 @@ const create = async ([leagueName, bracketId, token], channelMgr) => {
             console.log("GROUP RESET 완료")
 
 
-            await res.channelMgr.create({ name: leagueName, type: ChannelType.GuildCategory }).then(async CategoryChannel => {
+            await res.guildMgr.channels.create({ name: leagueName, type: ChannelType.GuildCategory }).then(async CategoryChannel => {
                 for (let i = 0; i < res.entries.length / 3; i++) {
-                    await res.channelMgr.create({ name: `그룹 - ${i + 1}`, type: ChannelType.GuildText, parent: CategoryChannel })
-                        .then(async TextChannel => {
-                            await pgClient.query(groupDao.create, [leagueId, `그룹 - ${i + 1}`, CategoryChannel.id])
-                        });
+                    const everyoneRole = guild.roles.everyone;
+
+                    await res.guildMgr.channels.create({ 
+                        name: `그룹 - ${i + 1}`, 
+                        type: ChannelType.GuildText,
+                        parent: CategoryChannel, 
+                        permissionsOverwrites: [
+                            ...adminId.map(admin => (id: admin, allow: [PermissionsBitField.Flags.ViewChannel]})),
+                            {id: client.user.id, allow: [PermissionsBitField.Flags.ViewChannel]},
+                            {id: everyoneRole.id, deny: [PermissionsBitField.Flags.ViewChannel]},
+                        ],
+                    }).then(async TextChannel => {
+                        await pgClient.query(groupDao.create, [leagueId, `그룹 - ${i + 1}`, TextChannel.id])
+                    });
                 }
             }).catch();
             console.log("GROUP CREATE 완료")
 
+            const groupCount = res.entries.length / 3
+
             for (let i = 0; i < 3; i++) {
-                const groupCount = res.entries.length / 3
                 for (let j = 0; j < groupCount; j++) {
                     const groupData = await pgClient.query(groupDao.selectByName, [leagueId, `그룹 - ${j + 1}`]);
                     const groupId = groupData[0].group_id;
@@ -105,6 +118,17 @@ const create = async ([leagueName, bracketId, token], channelMgr) => {
         			console.log(row)
                     await pgClient.query(matchDao.create, [leagueId, groupId, row.uma_uid])
                 }
+            }
+
+            for (let i = 0; i < groupCount; i++) {
+                const matchData = await pgClient.query(matchDao.selectByGroup, [leagueId, `그룹 - ${j + 1}`]);
+                console.log(matchData)
+                res.guildMgr.channels.permissionOverwrites.set(
+                    matchData.filter(data => data.discord_id !== "DUMMY").map(data => ({
+                        id: data.discord_id,
+                        allow: [PermissionsBitField.Flags.ViewChannel],
+                    }))
+                )
             }
             console.log("MATCH CREATE 완료")
 
@@ -128,7 +152,7 @@ const getMatches = async (param) => {
         .catch(() => "실패");
 }
 
-const matchCommand = async ([keyword, ...param] = [], discordId, channelMgr) => {
+const matchCommand = async ([keyword, ...param] = [], discordId, guildMgr) => {
     let emptyMsg = "";
     emptyMsg += `사용법\n`;
     emptyMsg += `!대진표 생성 {리그명} {lvup.gg URL} {lvup.gg 토큰}\n`;
@@ -139,7 +163,7 @@ const matchCommand = async ([keyword, ...param] = [], discordId, channelMgr) => 
     }
 
     if (keyword === "생성") {
-        return create(param, channelMgr)
+        return create(param, guildMgr)
     }
 
     if (keyword === "조회") {
