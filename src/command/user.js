@@ -11,7 +11,7 @@ const create = async (param, discordId) => {
 const select = async (param) => {
     return pgClient
         .query(userDao.select)
-        .then((res) => res.map((user) => `${user.uma_uid} - ${user.user_name} ${user.discord_id}`).join("\n"))
+        .then((res) => res.map((user) => `${user.uma_uid} - ${user.user_name}`).join("\n"))
         .catch(() => "실패");
 }
 
