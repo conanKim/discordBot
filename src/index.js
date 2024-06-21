@@ -4,7 +4,8 @@ const {
     adminId, 
     guildId, 
     clientId, 
-    allowChannelId, 
+    allowChannelId,
+    adminChannelId,
     allowKeyword, 
     gameChannelId, 
     generalChannelId 
