@@ -100,6 +100,8 @@ client.on("messageCreate", async (message) => {
                 break;
 
             case "!대진표":
+                if (!adminId.includes(message.author.id)) return sendMessage("권한이 없습니다.");
+
                 sendMessage(await matchCommand(param, message.author.id, message.guild))
                 break;
 
